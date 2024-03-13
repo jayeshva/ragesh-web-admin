@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div style="display: flex;flex-direction: column;">
+            <img src="logo.png" style="height: 120px; width: 120px; margin-left: 60px;" />
+            <p style="font-size: larger; color: black; font-weight: 600; margin-left: 70px; margin-bottom: 20px;">
+                FarmEasy</p>
+        </div>
+
+        <div
+            style="height: 600px; background-color: rgba(253, 251, 255, 0.55); font-size: large; padding: 10px; border-radius: 5px;">
+            <p style="font-size: 22px; font-weight: 700; color: black; margin-bottom: 8px; margin-top: 5px; margin-left: 50px;
+             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Feeds</p>
+              <a href="dashboard.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Dashboard</p>
+                </div>
+            </a>
+
+
+            <div style="height: 5px;"></div>
+
+            <a href="schemes.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Schemes</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="contacts.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Contacts</p>
+                </div>
+            </a>
+
+            <div style="height: 5px;"></div>
+            <a href="feeds.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Feeds</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="profile.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>User Profile</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="#" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Logout</p>
+                </div>
+            </a>
+
+
+
+
+        </div>
+    </div>
+    <div class="dashboard">
+        <div class="widget">
+            <h3>Schemes</h3>
+            <p id="schemesCount">0</p>
+        </div>
+        <div class="widget">
+            <h3>Contacts</h3>
+            <p id="contactsCount">0</p>
+        </div>
+
+        <div class="widget">
+            <h3>Pending Requests</h3>
+            <p id="pendingRequests">0</p>
+        </div>
+        <div class="widget">
+            <h3>Active Users</h3>
+            <p id="total_users_count">0</p>
+        </div>
+        <div class="widget">
+            <h3>Approved Requests</h3>
+            <p id="approvedCount">0</p>
+        </div>
+        <div class="widget">
+            <h3>Rejected Requests</h3>
+            <p id="rejectedCount">0</p>
+        </div>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

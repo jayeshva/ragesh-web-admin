@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="schemes.css">
+</head>
+
+<body>
+    <div class="viewDesc" id="viewDescription">
+        <h3> Scheme Name </h3>
+        <h5>
+            Description :
+        </h5>
+        <textarea style="width: 300px; height: 200px;"></textarea><br>
+        <button type="button" id="viewcancelButton">Cancel</button>
+
+
+    </div>
+    <div id="editSchemeForm" class="edit-scheme-form">
+        <h1>Edit Scheme</h1>
+        <form>
+            <label for="schemeName">Scheme Name:</label><br>
+            <input type="text" id="schemeName" name="schemeName"><br>
+            <label for="category">Category:</label><br>
+            <input type="text" id="category" name="category"><br>
+            <label for="lastDate">Last Date:</label><br>
+            <input type="text" id="lastDate" name="lastDate"><br>
+            <label for="updatedDate">Updated Date:</label><br>
+            <input type="text" id="updatedDate" name="updatedDate"><br>
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description"></textarea><br>
+
+            <button type="submit">Save</button>
+            <button type="button" id="cancelButton">Cancel</button>
+        </form>
+    </div>
+    <div id="addSchemeForm" class="add-scheme-form">
+        <h1>Add Scheme</h1>
+        <form>
+            <label for="schemeName">Scheme Name:</label><br>
+            <input type="text" id="addschemeName" name="schemeName"><br>
+            <label for="category">Category:</label><br>
+            <input type="text" id="addcategory" name="category"><br>
+            <label for="lastDate">Last Date:</label><br>
+            <input type="date" id="addlastDate" name="lastDate"><br>
+            <label for="updatedDate">Updated Date:</label><br>
+            <input type="date" id="addupdatedDate" name="updatedDate"><br>
+            <label for="description">Description:</label><br>
+            <textarea id="adddescription" name="description"></textarea><br>
+
+            <button type="submit">Save</button>
+            <button type="button" id="addcancelButton">Cancel</button>
+        </form>
+    </div>
+
+
+    <div class="sidebar">
+        <div style="display: flex;flex-direction: column;">
+            <img src="logo.png" style="height: 120px; width: 120px; margin-left: 60px;" />
+            <p style="font-size: larger; color: black; font-weight: 600; margin-left: 70px; margin-bottom: 20px;">
+                FarmEasy</p>
+        </div>
+
+        <div
+            style="height: 600px; background-color: rgba(253, 251, 255, 0.55); font-size: large; padding: 10px; border-radius: 5px;">
+            <p style="font-size: 22px; font-weight: 700; color: black; margin-bottom: 8px; margin-top: 5px; 
+            margin-left: 50px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Schemes</p>
+             <a href="dashboard.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Dashboard</p>
+                </div>
+            </a>
+
+            <div style="height: 5px;"></div>
+
+            <a href="schemes.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Schemes</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="contacts.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Contacts</p>
+                </div>
+            </a>
+
+            <div style="height: 5px;"></div>
+            <a href="feeds.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Feeds</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="profile.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>User Profile</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="#" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Logout</p>
+                </div>
+            </a>
+
+
+        </div>
+    </div>
+    <div class="dashboard">
+        <div class="bslot">
+            <div class="op">
+                <p>Add Scheme</p>
+            </div>
+        </div>
+
+        <div class="MainArea" style="margin-top:10px ;">
+            <div class="schemeCards">
+                <div class="srow">
+                    <div class="datacontainer">
+                        <P style="font-size: larger;"><b>Scheme Name</b></P>
+                        <p style="margin-top: -10px;">Category : Equipments</p>
+                        <p style="margin-top: -10px;">Last date : 13/03/2024</p>
+                        <p style="margin-top: -10px;">Updated on : 10/03/2024</p>
+                    </div>
+                    <div class="countContainer">
+                        <p style="margin-top: -10px;"><b>Under Review Count : <span id="underReviewValue"></span></b>
+                        </p>
+                        <p style="margin-top: -10px;"><b>Approved Count : <span id="approvedCount"></span></b></p>
+                        <p style="margin-top: -10px;"><b>Rejected Count : <span id="rejectedCount"></span></b></p>
+                        <p style="margin-top: -10px;"><b>Total Count : <span id="totalCount"></span></b></p>
+
+                    </div>
+                </div>
+                <div
+                    style="display: flex; flex-direction: row; padding-left: 40px; margin-left: 60px; margin-bottom: 15px;">
+                    <div class="edit-button" style=" display: block;height: 30px; width: 80px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; margin-left: 10px;cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;">Edit</P>
+                    </div>
+
+                    <div onclick="openEnroll()" style=" display: block;height: 30px; width: 125px;margin-left: 10px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;"> View Enroll</P>
+                    </div>
+                    <div id="showdescription" onclick="showdescriptionFun()" style=" display: block;height: 30px; width: 123px;margin-left: 10px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;">Description</P>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="schemeCards">
+                <div class="srow">
+                    <div class="datacontainer">
+                        <P style="font-size: larger;"><b>Scheme Name</b></P>
+                        <p style="margin-top: -10px;">Category : Equipments</p>
+                        <p style="margin-top: -10px;">Last date : 13/03/2024</p>
+                        <p style="margin-top: -10px;">Updated on : 10/03/2024</p>
+                    </div>
+                    <div class="countContainer">
+                        <p style="margin-top: -10px;"><b>Under Review Count : <span id="underReviewValue"></span></b>
+                        </p>
+                        <p style="margin-top: -10px;"><b>Approved Count : <span id="approvedCount"></span></b></p>
+                        <p style="margin-top: -10px;"><b>Rejected Count : <span id="rejectedCount"></span></b></p>
+                        <p style="margin-top: -10px;"><b>Total Count : <span id="totalCount"></span></b></p>
+
+                    </div>
+                </div>
+                <div
+                    style="display: flex; flex-direction: row; padding-left: 40px; margin-left: 60px; margin-bottom: 15px;">
+                    <div class="edit-button" style=" display: block;height: 30px; width: 80px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; margin-left: 10px;cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;">Edit</P>
+                    </div>
+
+                    <div style=" display: block;height: 30px; width: 125px;margin-left: 10px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;"> View Enroll</P>
+                    </div>
+                    <div style=" display: block;height: 30px; width: 123px;margin-left: 10px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;">Description</P>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="schemeCards">
+                <div class="srow">
+                    <div class="datacontainer">
+                        <P style="font-size: larger;"><b>Scheme Name</b></P>
+                        <p style="margin-top: -10px;">Category : Equipments</p>
+                        <p style="margin-top: -10px;">Last date : 13/03/2024</p>
+                        <p style="margin-top: -10px;">Updated on : 10/03/2024</p>
+                    </div>
+                    <div class="countContainer">
+                        <p style="margin-top: -10px;"><b>Under Review Count : <span id="underReviewValue"></span></b>
+                        </p>
+                        <p style="margin-top: -10px;"><b>Approved Count : <span id="approvedCount"></span></b></p>
+                        <p style="margin-top: -10px;"><b>Rejected Count : <span id="rejectedCount"></span></b></p>
+                        <p style="margin-top: -10px;"><b>Total Count : <span id="totalCount"></span></b></p>
+
+                    </div>
+                </div>
+                <div
+                    style="display: flex; flex-direction: row; padding-left: 40px; margin-left: 60px; margin-bottom: 15px;">
+                    <div class="edit-button" style=" display: block;height: 30px; width: 80px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; margin-left: 10px;cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;">Edit</P>
+                    </div>
+
+                    <div style=" display: block;height: 30px; width: 125px;margin-left: 10px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;"> View Enroll</P>
+                    </div>
+                    <div style=" display: block;height: 30px; width: 123px;margin-left: 10px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+            border-radius: 3px; cursor: pointer;">
+                        <P style="margin-left: 25px; margin-top: 7px;">Description</P>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+       
+
+    </div>
+
+    <script>
+        // Get the "Edit" buttons
+        var editButtons = document.querySelectorAll('.edit-button');
+        var bslot = document.querySelector('.bslot');
+
+
+        // Get the edit scheme form
+        var editSchemeForm = document.getElementById('editSchemeForm');
+        var cancelButton = document.getElementById('cancelButton');
+        var addcancelButton = document.getElementById('addcancelButton');
+        var addSchemeForm = document.getElementById('addSchemeForm');
+        var showdescription  = document.getElementById('showdescription');
+        var viewDescription = document.getElementById('viewDescription');
+        var viewcancelButton = document.getElementById('viewcancelButton');
+
+        cancelButton.addEventListener('click', function () {
+            editSchemeForm.style.display = "none";
+        })
+
+        bslot.addEventListener('click', function () {
+            addSchemeForm.style.display = "block"
+        })
+        addcancelButton.addEventListener('click', function () {
+            addSchemeForm.style.display = "none";
+        })
+        // Add click event listener to each "Edit" button
+        editButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Show the edit scheme form
+                editSchemeForm.style.display = 'block';
+            });
+        });
+        viewcancelButton.addEventListener('click',()=>{
+            viewDescription.style.display="none";
+        })
+        // Assuming you have a variable named underReviewValue containing the count value
+        var underReviewValue = 20;
+        var approvedCount = 10;
+        var rejectedCount = 15;
+        var totalCount = 45;
+
+        // Embed the variable value into the HTML
+        document.getElementById('underReviewValue').textContent = underReviewValue;
+        document.getElementById('approvedCount').textContent = approvedCount;
+        document.getElementById('rejectedCount').textContent = rejectedCount;
+        document.getElementById('totalCount').textContent = totalCount;
+        
+
+        function showdescriptionFun(){
+            viewDescription.style.display="block";
+        }
+
+        function openEnroll(){
+
+            window.location.href = "enroll.html";
+            
+
+        }
+    </script>
+
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

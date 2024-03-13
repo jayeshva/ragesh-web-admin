@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="enroll.css">
+    
+</head>
+
+<body>
+    <div class="viewApprove" id="viewApprove">
+        <h3> User Name </h3>
+        <h4>jayesh.cs20@bitsathy.ac.in</h4>
+        <textarea style="width: 300px; height: 200px;"></textarea><br>
+        <button type="button" id="approveButton">Approve</button>
+        <button type="button" id="approvecancelButton">Cancel</button>
+    </div>
+    <div class="viewReject" id="viewReject">
+        <h3> User Name </h3>
+        <h4>jayesh.cs20@bitsathy.ac.in</h4>
+        <textarea style="width: 300px; height: 200px;"></textarea><br>
+        <button type="button" id="rejectApprovalButton">Reject</button>
+        <button type="button" id="rejectcancelButton">Cancel</button>
+    </div>
+    <div class="sidebar">
+        <div style="display: flex;flex-direction: column;">
+            <img src="logo.png" style="height: 120px; width: 120px; margin-left: 60px;" />
+            <p style="font-size: larger; color: black; font-weight: 600; margin-left: 70px; margin-bottom: 20px;">
+                FarmEasy</p>
+        </div>
+
+        <div
+            style="height: 600px; background-color: rgba(253, 251, 255, 0.55); font-size: large; padding: 10px; border-radius: 5px;">
+            <p style="font-size: 22px; font-weight: 700; color: black; margin-bottom: 8px; 
+            margin-top: 5px; margin-left: 70px; font-family: 'Segoe UI', Tahoma, Geneva, 
+            Verdana, sans-serif;">Enroll</p>
+             <a href="dashboard.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Dashboard</p>
+                </div>
+            </a>
+
+
+            <div style="height: 5px;"></div>
+
+            <a href="schemes.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Schemes</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="contacts.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Contacts</p>
+                </div>
+            </a>
+
+            <div style="height: 5px;"></div>
+            <a href="feeds.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Feeds</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="profile.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>User Profile</p>
+                </div>
+            </a>
+            <div style="height: 5px;"></div>
+            <a href="#" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
+                    <p>Logout</p>
+                </div>
+            </a>
+
+
+
+
+
+
+        </div>
+    </div>
+    <div class="dashboard">
+        <div class="Sdetails" style="display: flex; flex-direction: column; position: fixed; top: 0; left: 30; width: 100%; background-color: white; z-index: 1;">
+            <h1>Scheme Name</h1>
+            <h3 style="margin-top: -10px;">Category : Equipments</h3>
+            <h3 style="margin-top: -10px;">Scheme ID : 16872316787</h3>
+          </div>
+        <br>
+        <div class="cardFlex">
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve" id="approveAction">Approve</button>
+                    <button class="reject" id="rejectAction">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve">Approve</button>
+                    <button class="reject">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve">Approve</button>
+                    <button class="reject">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve">Approve</button>
+                    <button class="reject">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve">Approve</button>
+                    <button class="reject">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve">Approve</button>
+                    <button class="reject">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve">Approve</button>
+                    <button class="reject">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve">Approve</button>
+                    <button class="reject">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">User Name</h3>
+                <div class="card-status">Status: Approved</div>
+                <div class="card-comments">Comments: Approved</div>
+                <div class="actions">
+                    <button class="approve">Approve</button>
+                    <button class="reject">Reject</button>
+                    <button class="comment">Add Comment</button>
+                    <div class="profile">
+                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+       
+    </div>
+
+    <script>
+        var viewApprove = document.getElementById("viewApprove");
+        var viewReject =document.getElementById("viewReject");
+        var approveAction = document.getElementById("approveAction");
+        var approvecancelButton = document.getElementById("approvecancelButton");
+        var rejectcancelButton = document.getElementById("rejectcancelButton");
+        var rejectAction = document.getElementById("RejectcancelButton");
+        approveAction.addEventListener('click',()=>{
+            viewApprove.style.display="block";
+        })
+        approvecancelButton.addEventListener('click',()=>{
+            viewApprove.style.display="none";
+        })
+
+        rejectAction.addEventListener('click',()=>{
+            viewReject.style.display="block";
+        })
+        rejectcancelButton.addEventListener('click',()=>{
+            viewApprove.style.display="none";
+        })
+    </script>
+    
+</body>
+
+</html>
