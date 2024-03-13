@@ -1,102 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
-</head>
+    <link rel="stylesheet" href="contact.css" />
+  </head>
 
-<body>
+  <body>
+    <div id="addContactForm" class="add-contact-form">
+        <h1>Add Contact</h1>
+        <form>
+            <label for="userName">User Name :</label><br>
+            <input type="text" id="addUserName" name="userName"><br>
+            <label for="organisation">Organisation :</label><br>
+            <input type="text" id="addOrganisation" name="organisation"><br>
+            <label for="mobile">Mobile :</label><br>
+            <input type="text" id="addMobile" name="mobile"><br>
+            <label for="email">Email :</label><br>
+            <input type="email" id="addEmail" name="email"><br>
+            <label for="location">Location :</label><br>
+            <input type="text" id="addLocation" name="location"></input><br>
+            <label for="designation">Designation :</label><br>
+            <input type="text" id="addDesignation" name="designation"></input><br>
+
+            <button type="submit">Add</button>
+            <button type="button" id="addcancelButton">Cancel</button>
+        </form>
+    </div>
+    <div id="editContactForm" class="edit-contact-form">
+        <h1>Edit Contact</h1>
+        <form>
+            <label for="userName">User Name :</label><br>
+            <input type="text" id="editUserName" name="userName"><br>
+            <label for="organisation">Organisation :</label><br>
+            <input type="text" id="editOrganisation" name="organisation"><br>
+            <label for="mobile">Mobile :</label><br>
+            <input type="text" id="editMobile" name="mobile"><br>
+            <label for="email">Email :</label><br>
+            <input type="email" id="editEmail" name="email"><br>
+            <label for="location">Location :</label><br>
+            <input type="text" id="editLocation" name="location"></input><br>
+            <label for="designation">Designation :</label><br>
+            <input type="text" id="editDesignation" name="designation"></input><br>
+
+            <button type="submit">Save</button>
+            <button type="button" id="editcancelButton">Cancel</button>
+        </form>
+    </div>
     <div class="sidebar">
-        <div style="display: flex;flex-direction: column;">
-            <img src="logo.png" style="height: 120px; width: 120px; margin-left: 60px;" />
-            <p style="font-size: larger; color: black; font-weight: 600; margin-left: 70px; margin-bottom: 20px;">
-                FarmEasy</p>
-        </div>
+      <div style="display: flex; flex-direction: column">
+        <img
+          src="logo.png"
+          style="height: 120px; width: 120px; margin-left: 60px"
+        />
+        <p
+          style="
+            font-size: larger;
+            color: black;
+            font-weight: 600;
+            margin-left: 70px;
+            margin-bottom: 20px;
+          "
+        >
+          FarmEasy
+        </p>
+      </div>
 
-        <div
-            style="height: 600px; background-color: rgba(253, 251, 255, 0.55); font-size: large; padding: 10px; border-radius: 5px;">
-            <p style="font-size: 22px; font-weight: 700; color: black; margin-bottom: 8px; 
-            margin-top: 5px; margin-left: 50px; font-family: 'Segoe UI', Tahoma, Geneva, 
-            Verdana, sans-serif;">Contacts</p>
-             <a href="dashboard.html" style="text-decoration: none; color: aliceblue;">
-                <div class="side-items">
-                    <p>Dashboard</p>
-                </div>
-            </a>
-           
+      <div
+        style="
+          height: 600px;
+          background-color: rgba(253, 251, 255, 0.55);
+          font-size: large;
+          padding: 10px;
+          border-radius: 5px;
+        "
+      >
+        <p
+          style="
+            font-size: 22px;
+            font-weight: 700;
+            color: black;
+            margin-bottom: 8px;
+            margin-top: 5px;
+            margin-left: 60px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          "
+        >
+          Contacts
+        </p>
+        <a
+          href="dashboard.html"
+          style="text-decoration: none; color: aliceblue"
+        >
+          <div class="side-items">
+            <p>Dashboard</p>
+          </div>
+        </a>
 
+        <div style="height: 5px"></div>
 
-            <div style="height: 5px;"></div>
+        <a href="schemes.html" style="text-decoration: none; color: aliceblue">
+          <div class="side-items">
+            <p>Schemes</p>
+          </div>
+        </a>
+        <div style="height: 5px"></div>
+        <a href="#" style="text-decoration: none; color: aliceblue">
+          <div class="side-items" style="background-color: rgb(25, 127, 164);">
+            <p>Contacts</p>
+          </div>
+        </a>
 
-            <a href="schemes.html" style="text-decoration: none; color: aliceblue;">
-                <div class="side-items">
-                    <p>Schemes</p>
-                </div>
-            </a>
-            <div style="height: 5px;"></div>
-            <a href="contacts.html" style="text-decoration: none; color: aliceblue;">
-                <div class="side-items">
-                    <p>Contacts</p>
-                </div>
-            </a>
-
-            <div style="height: 5px;"></div>
-            <a href="feeds.html" style="text-decoration: none; color: aliceblue;">
-                <div class="side-items">
-                    <p>Feeds</p>
-                </div>
-            </a>
-            <div style="height: 5px;"></div>
-            <a href="profile.html" style="text-decoration: none; color: aliceblue;">
-                <div class="side-items">
-                    <p>User Profile</p>
-                </div>
-            </a>
-            <div style="height: 5px;"></div>
-            <a href="#" style="text-decoration: none; color: aliceblue;">
-                <div class="side-items">
-                    <p>Logout</p>
-                </div>
-            </a>
-
-
-
-
-
-
-        </div>
+        <div style="height: 5px"></div>
+        <a href="feeds.html" style="text-decoration: none; color: aliceblue">
+          <div class="side-items">
+            <p>Feeds</p>
+          </div>
+        </a>
+        <div style="height: 5px"></div>
+        <a href="profile.html" style="text-decoration: none; color: aliceblue">
+          <div class="side-items">
+            <p>User Profile</p>
+          </div>
+        </a>
+        <div style="height: 5px"></div>
+        <a href="#" style="text-decoration: none; color: aliceblue">
+          <div class="side-items">
+            <p>Logout</p>
+          </div>
+        </a>
+      </div>
     </div>
+
     <div class="dashboard">
-        <div class="widget">
-            <h3>Schemes</h3>
-            <p id="schemesCount">0</p>
+        <div class="bslot">
+            <div class="op">
+                <p>Add Contact</p>
+            </div>
         </div>
-        <div class="widget">
-            <h3>Contacts</h3>
-            <p id="contactsCount">0</p>
-        </div>
-
-        <div class="widget">
-            <h3>Pending Requests</h3>
-            <p id="pendingRequests">0</p>
-        </div>
-        <div class="widget">
-            <h3>Active Users</h3>
-            <p id="total_users_count">0</p>
-        </div>
-        <div class="widget">
-            <h3>Approved Requests</h3>
-            <p id="approvedCount">0</p>
-        </div>
-        <div class="widget">
-            <h3>Rejected Requests</h3>
-            <p id="rejectedCount">0</p>
-        </div>
+      <div class="cardContainer">
+        <div class="contact-card">
+            <img src="data:image/png;base64,{{profileimg}}" alt="Profile Image" />
+            <h2>{{userName}}</h2>
+            <p><strong>Organisation:</strong> {{organisation}}</p>
+            <p><strong>Mobile:</strong> {{mobile}}</p>
+            <p><strong>Email:</strong> {{email}}</p>
+            <p><strong>Location:</strong> {{location}}</p>
+            <p><strong>Designation:</strong> {{designation}}</p>
+            <!-- Edit and delete buttons -->
+            <button id="editContactAction" onclick="editContact()">Edit</button>
+            <button  id="deleteContactAction" onclick="deleteContact()">Delete</button>
+          </div>
+          <div class="contact-card">
+            <img src="data:image/png;base64,{{profileimg}}" alt="Profile Image" />
+            <h2>{{userName}}</h2>
+            <p><strong>Organisation:</strong> {{organisation}}</p>
+            <p><strong>Mobile:</strong> {{mobile}}</p>
+            <p><strong>Email:</strong> {{email}}</p>
+            <p><strong>Location:</strong> {{location}}</p>
+            <p><strong>Designation:</strong> {{designation}}</p>
+            <!-- Edit and delete buttons -->
+            <button onclick="editContact()">Edit</button>
+            <button onclick="deleteContact()">Delete</button>
+          </div>
+          <div class="contact-card">
+            <img src="data:image/png;base64,{{profileimg}}" alt="Profile Image" />
+            <h2>{{userName}}</h2>
+            <p><strong>Organisation:</strong> {{organisation}}</p>
+            <p><strong>Mobile:</strong> {{mobile}}</p>
+            <p><strong>Email:</strong> {{email}}</p>
+            <p><strong>Location:</strong> {{location}}</p>
+            <p><strong>Designation:</strong> {{designation}}</p>
+            <!-- Edit and delete buttons -->
+            <button onclick="editContact()">Edit</button>
+            <button onclick="deleteContact()">Delete</button>
+          </div>
+      </div>
     </div>
-    <script src="dashboard.js"></script>
-</body>
+    <script>
+        var addContactForm = document.getElementById("addContactForm");
+        var addcancelButton = document.getElementById("addcancelButton");
+        var editContactForm = document.getElementById("editContactForm");
+        var editcancelButton = document.getElementById("editcancelButton");
+        var editContactAction = document.getElementById("editContactAction")
+        var bslot = document.querySelector('.bslot');
+        bslot.addEventListener('click', function () {
+            addContactForm.style.display = "block"
+        })
+        addcancelButton.addEventListener('click', function () {
+            addContactForm.style.display = "none"
+        })
 
+        editContactAction.addEventListener('click',()=>{
+            editContactForm.style.display = "block"
+        })
+
+        editcancelButton.addEventListener('click', function () {
+            editContactForm.style.display = "none"
+        })
+        
+
+    </script>
+  </body>
 </html>

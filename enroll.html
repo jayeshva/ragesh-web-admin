@@ -24,6 +24,13 @@
         <button type="button" id="rejectApprovalButton">Reject</button>
         <button type="button" id="rejectcancelButton">Cancel</button>
     </div>
+    <div class="viewComment" id="viewComment">
+        <h3> User Name </h3>
+        <h4>jayesh.cs20@bitsathy.ac.in</h4>
+        <textarea style="width: 300px; height: 200px;"></textarea><br>
+        <button type="button" id="commentButton">Comment</button>
+        <button type="button" id="commentcancelButton">Cancel</button>
+    </div>
     <div class="sidebar">
         <div style="display: flex;flex-direction: column;">
             <img src="logo.png" style="height: 120px; width: 120px; margin-left: 60px;" />
@@ -98,119 +105,7 @@
                 <div class="actions">
                     <button class="approve" id="approveAction">Approve</button>
                     <button class="reject" id="rejectAction">Reject</button>
-                    <button class="comment">Add Comment</button>
-                    <div class="profile">
-                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
-                <div class="actions">
-                    <button class="approve">Approve</button>
-                    <button class="reject">Reject</button>
-                    <button class="comment">Add Comment</button>
-                    <div class="profile">
-                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
-                <div class="actions">
-                    <button class="approve">Approve</button>
-                    <button class="reject">Reject</button>
-                    <button class="comment">Add Comment</button>
-                    <div class="profile">
-                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
-                <div class="actions">
-                    <button class="approve">Approve</button>
-                    <button class="reject">Reject</button>
-                    <button class="comment">Add Comment</button>
-                    <div class="profile">
-                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
-                <div class="actions">
-                    <button class="approve">Approve</button>
-                    <button class="reject">Reject</button>
-                    <button class="comment">Add Comment</button>
-                    <div class="profile">
-                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
-                <div class="actions">
-                    <button class="approve">Approve</button>
-                    <button class="reject">Reject</button>
-                    <button class="comment">Add Comment</button>
-                    <div class="profile">
-                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
-                <div class="actions">
-                    <button class="approve">Approve</button>
-                    <button class="reject">Reject</button>
-                    <button class="comment">Add Comment</button>
-                    <div class="profile">
-                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
-                <div class="actions">
-                    <button class="approve">Approve</button>
-                    <button class="reject">Reject</button>
-                    <button class="comment">Add Comment</button>
-                    <div class="profile">
-                        <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
-                <div class="actions">
-                    <button class="approve">Approve</button>
-                    <button class="reject">Reject</button>
-                    <button class="comment">Add Comment</button>
+                    <button class="comment" id="commentAction">Add Comment</button>
                     <div class="profile">
                         <a href="#" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
                     </div>
@@ -228,7 +123,10 @@
         var approveAction = document.getElementById("approveAction");
         var approvecancelButton = document.getElementById("approvecancelButton");
         var rejectcancelButton = document.getElementById("rejectcancelButton");
-        var rejectAction = document.getElementById("RejectcancelButton");
+        var rejectAction = document.getElementById("rejectAction");
+        var commentAction = document.getElementById("commentAction");
+        var viewComment = document.getElementById("viewComment");
+        var commentcancelButton = document.getElementById("commentcancelButton");
         approveAction.addEventListener('click',()=>{
             viewApprove.style.display="block";
         })
@@ -240,8 +138,15 @@
             viewReject.style.display="block";
         })
         rejectcancelButton.addEventListener('click',()=>{
-            viewApprove.style.display="none";
+            viewReject.style.display="none";
         })
+        commentAction.addEventListener('click',()=>{
+            viewComment.style.display="block";
+        })
+        commentcancelButton.addEventListener('click',()=>{
+            viewComment.style.display="none";
+        })
+
     </script>
     
 </body>
