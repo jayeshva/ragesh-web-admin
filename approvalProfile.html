@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="profile.css">
 </head>
 
 <body>
@@ -18,12 +18,14 @@
 
         <div
             style="height: 600px; background-color: rgba(253, 251, 255, 0.55); font-size: large; padding: 10px; border-radius: 5px;">
-            <p style="font-size: 22px; font-weight: 700; color: black; margin-bottom: 8px; margin-top: 5px; margin-left: 60px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Welcome</p>
-            <a href="#" style="text-decoration: none; color: aliceblue;">
-                <div class="side-items" style="background-color: rgb(25, 127, 164);">
+            <p style="font-size: 22px; font-weight: 700; color: black; margin-bottom: 8px; margin-top: 5px;
+             margin-left: 50px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">User Profile</p>
+             <a href="dashboard.html" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items">
                     <p>Dashboard</p>
                 </div>
             </a>
+
 
             <div style="height: 5px;"></div>
 
@@ -46,8 +48,8 @@
                 </div>
             </a>
             <div style="height: 5px;"></div>
-            <a href="profile.html" style="text-decoration: none; color: aliceblue;">
-                <div class="side-items">
+            <a href="#" style="text-decoration: none; color: aliceblue;">
+                <div class="side-items" style="background-color: rgb(25, 127, 164);">
                     <p>User Profile</p>
                 </div>
             </a>
@@ -58,36 +60,37 @@
                 </div>
             </a>
 
-        </div>
-    </div>
-    <div class="dashboard">
-        <div class="widget">
-            <h3>Schemes</h3>
-            <p id="schemesCount">0</p>
-        </div>
-        <div class="widget">
-            <h3>Contacts</h3>
-            <p id="contactsCount">0</p>
-        </div>
 
-        <div class="widget">
-            <h3>Pending Requests</h3>
-            <p id="pendingRequests">0</p>
-        </div>
-        <div class="widget">
-            <h3>Active Users</h3>
-            <p id="total_users_count">0</p>
-        </div>
-        <div class="widget">
-            <h3>Approved Requests</h3>
-            <p id="approvedCount">0</p>
-        </div>
-        <div class="widget">
-            <h3>Rejected Requests</h3>
-            <p id="rejectedCount">0</p>
+
+
+
+
         </div>
     </div>
-    <script src="dashboard.js"></script>
+   
+    <div class="dashboard">
+       
+       
+
+        <div class="card" style="margin-top: 20px;">
+            <h3 class="card-title">User Profile</h3>
+            <img class="card-image" src="" > 
+            <p class="card-data">Name: Ragesh N</p>
+            <p class="card-data">Gender: Male</p>
+            <p class="card-data">Mobile: 1234567890</p>
+            <p class="card-data">Email: ragesh.cs20@bitsathy.ac.in</p>
+            <p class="card-data">Account No: 123456789012</p>
+            <p class="card-data">IFSC: HADFC229423</p>
+            <p class="card-data">Total Subsidies Applied: 25</p>
+            <p class="card-data">Total Subsidies Approved: 0</p>
+            <div style="display: flex; justify-content: space-between;">
+              <button class="view-button" disabled>View Aadhaar</button>
+              <button class="view-button" disabled>View PAN</button>
+            </div>
+          </div>
+      
+    </div>
+    <script></script>
 </body>
 
 </html>
