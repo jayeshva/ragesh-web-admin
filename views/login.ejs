@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="text/css" rel="stylesheet" href="login.css">
+    <link type="text/css" rel="stylesheet" href="/public/styles/login.css">
 
     <title>Login Page</title>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="container">
-        <img src="logo.png" alt="logo" width="100" height="100" >
+        <img src="/public/img/logo.png" alt="logo" width="100" height="100" >
         <h2>Login</h2>
         <form id="login-form">
             <input type="email" placeholder="Email" id="login-email" required>
@@ -26,8 +26,8 @@
         <a href="#" onclick="signOut();">Sign out</a> -->
 
 
-        <p>Don't have an account? <a href="register.html">Sign Up</a></p>
-    </div>
+        <p>Don't have an account? <a href="/register">Sign Up</a></p>
+    </div> 
     <script>
         function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();

@@ -4,54 +4,25 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var Question = require('./controllers/questions');
-var Module = require('./controllers/module');
-var Stack = require('./controllers/stacks');
-var Problem = require('./controllers/codings');
-var Report = require('./controllers/report');
-var Assesment = require('./controllers/assesment');
-var AssesmentSubmission = require('./models/assesmentsubmissions');
-var AssesmentReport = require('./controllers/assesment_report');
-var colleges = require('./controllers/colleges');
-var faculty = require('./controllers/faculty');
-var tutor = require('./controllers/tutor');
-var admin = require('./controllers/admin');
-var User = require('./models/users');
-var PracticedMcq = require('./models/practicedMcq');
-var PracticedCoding = require('./models/practicedCodingAttempted');
-var PracticedCodingSubmission = require('./models/PracticedCodingSubmissions');
-var config = require('./config/config');
 var jwt = require('jsonwebtoken');
 const fs = require('fs'); // To read SSL certificate and key
 const https = require('https'); // Include the 'https' module
-const csvtojson = require('csvtojson');
-
-var bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-var verifySession = require('./config/verifySession');
 var cookieParser = require('cookie-parser');
-var cors = require('cors');
-const e = require('express');
+var cors = require('cors');  
+var dashboard = require('./controllers/dashboard');
+var contact = require('./controllers/contact');
+var schemes = require('./controllers/schemes');
+var feeds = require('./controllers/feeds');
+var profile = require('./controllers/profile');
+var enroll = require('./controllers/enroll');
+var approvalProfile = require('./controllers/approvalProfile');
 const port = 8000;
 
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:80',
-    'https://localhost:443',
-    'http://54.215.176.218:3000',
-    'https://platform.rampex.in',
-    // Add more origins as needed
-];
-app.use(cors({
-    origin: allowedOrigins,
-    credentials: true,
-    methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS']
-}));
-
-
-// // mongoose.connect('mongodb+srv://jayeshcs20:jayeshcs20@cluster0.rpg3dwc.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect('mongodb+srv://rampex20:rampex20@rampex.ws927hl.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true });
+app.set('view engine', 'ejs');
+app.use("/public", express.static(__dirname+"/public"))
+mongoose.connect('mongodb+srv://jayeshcs20:jayeshcs20@farmeasydb.jpxxhts.mongodb.net/');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -74,14 +45,24 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/platform.rampex.in/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/platform.rampex.in/fullchain.pem', 'utf8');
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/platform.rampex.in/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/platform.rampex.in/fullchain.pem', 'utf8');
 //const privateKey = fs.readFileSync('./rampex.key', 'utf8');
 //const certificate = fs.readFileSync('./rampex.crt', 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+// const credentials = { key: privateKey, cert: certificate };
+
+
+app.use('/dashboard', dashboard);
+app.use('/contacts', contact);
+app.use('/schemes', schemes);
+app.use('/feeds', feeds);
+app.use('/profile', profile);
+app.use('/enroll', enroll);
+app.use('/approvalProfile', approvalProfile);
+
 
 app.get('/', function (req, res) {
-    res.send("WELCOME TO FarmEasy API");
+    res.render('login');
 });
 
 app.post('/register/v2', async (req, res) => {
@@ -213,6 +194,15 @@ app.get('/confirm/:token', async (req, res) => {
     }
 });
 
+app.get('/login', async function (req, res) {
+    res.render('login');
+});
+
+app.get('/register', async function (req, res) {
+    res.render('register');
+});
+
+
 app.post('/login', async (req, res) => {
     try {
         const { user_email, user_password } = req.body;
@@ -273,15 +263,12 @@ app.post('/logout', function (req, res) {
 );
 
 
-
-
-
-// app.listen(port, function () {
-//     console.log(`Express server listening on port ${port}`);
-// });
-const httpsServer = https.createServer(credentials, app);
-
-
-httpsServer.listen(port, function () {
-    console.log(`Express server listening on port ${port} (HTTPS)`);
+app.listen(port, function () {
+    console.log(`Express server listening on port ${port}`);
 });
+// const httpsServer = https.createServer(credentials, app);
+
+
+// httpsServer.listen(port, function () {
+//     console.log(`Express server listening on port ${port} (HTTPS)`);
+// });

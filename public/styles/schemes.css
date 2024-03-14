@@ -227,7 +227,7 @@ padding-left: 25px;
 }
 
 #viewDescription {
-    position: absolute;
+    position: fixed;
     display: none;
     width: fit-content;
     margin-top: 150px;
