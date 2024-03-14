@@ -1,6 +1,7 @@
 var express = require('express');
 const session = require('express-session');
 var app = express();
+var fileUpload = require('express-fileupload');
 var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -17,9 +18,11 @@ var schemes = require('./controllers/schemes');
 var feeds = require('./controllers/feeds');
 var profile = require('./controllers/profile');
 var enroll = require('./controllers/enroll');
+var User = require('./models/user');
 var approvalProfile = require('./controllers/approvalProfile');
 const port = 8000;
 
+app.use(fileUpload());
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname+"/public"))
 mongoose.connect('mongodb+srv://jayeshcs20:jayeshcs20@farmeasydb.jpxxhts.mongodb.net/');
@@ -67,11 +70,15 @@ app.get('/', function (req, res) {
 
 app.post('/register/v2', async (req, res) => {
     try {
-        const { user_name, user_email, user_password, user_contact } = req.body;
-        // const user_type = "student";
+        const { user_name, user_email, user_password, user_mobile ,user_gender} = req.body;
         const token = crypto.randomBytes(20).toString('hex');
-        const user_type = "student";
-        const hashedPassword = await bcrypt.hash(user_password, 10);
+
+        console.log(req.body)
+        console.log(req.files)
+
+        if (!req.files) {
+            return res.status(400).json({ message: 'Upload a Mandatory files uploaded' });
+        }
         const transporter = nodemailer.createTransport({
             service: 'Gmail', // Replace with your email service provider
             auth: {
@@ -83,64 +90,25 @@ app.post('/register/v2', async (req, res) => {
 
         // Check if the email already exists
         const existingUser = await User.findOne({ user_email });
-        if (existingUser && existingUser.user_status == "active") {
+        if (existingUser) {
             return res.status(400).json({ message: 'Email already registered', status: 0 });
-        }
-        else if (existingUser && existingUser.user_status == "deactive") {
-            return res.status(400).json({ message: 'Email already registered', status: 0 });
-        }
-        else if (existingUser && existingUser.user_status == "disabled") {
-            existingUser.user_name = user_name;
-            existingUser.user_password = hashedPassword;
-            existingUser.user_type = user_type;
-            existingUser.user_contact = user_contact;
-
-            // Save the user to the database
-            existingUser.confirmationToken = token;
-
-            // Email content with confirmation link
-            const confirmationLink = `https://platform.rampex.in:8000/confirm/${token}`; // Replace with your confirmation route
-            const mailOptions = {
-                from: 'rampex.india@gmail.com', // Sender address
-                to: user_email, // Receiver's email
-                subject: 'Registration Confirmation', // Email subject
-                text: `Hello ${user_name},\n\nPlease click on the following link to confirm your registration:\n${confirmationLink}`, // Email body
-            };
-
-            // Send the email
-            transporter.sendMail(mailOptions, async (error, info) => {
-                if (error) {
-                    console.error('Error sending email:', error);
-                    // Handle error in sending email
-                    return res.status(500).json({ message: 'Error sending confirmation email', status: 0 });
-                }
-                console.log('Email sent:', info.response);
-                await existingUser.save();
-                // Email sent successfully
-                res.status(201).json({ message: 'User registered successfully. ReConfirmation email sent.', status: 1, user: existingUser });
-            });
-
         }
         else {
             // Create a new user
             const newUser = new User({
                 user_name,
                 user_email,
-                user_password: hashedPassword,
-                user_type,
-                user_contact,
+                user_password,
+                user_mobile,
+                user_gender
             });
 
-            // Save the user to the database
             newUser.confirmationToken = token;
 
-
-
-
             // Email content with confirmation link
-            const confirmationLink = `https://platform.rampex.in:8000/confirm/${token}`; // Replace with your confirmation route
+            const confirmationLink = `http://localhost:8000/confirm/${token}`; // Replace with your confirmation route
             const mailOptions = {
-                from: 'rampex.india@gmail.com', // Sender address
+                from: 'jayesh007va@gmail.com', // Sender address
                 to: user_email, // Receiver's email
                 subject: 'Registration Confirmation', // Email subject
                 text: `Hello ${user_name},\n\nPlease click on the following link to confirm your registration:\n${confirmationLink}`, // Email body
