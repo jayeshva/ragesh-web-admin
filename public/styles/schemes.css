@@ -97,7 +97,7 @@ body {
 display: flex;
 flex-direction: column;
 width: 600px;
-height: 200px;
+height: fit-content;
 background-color: rgba(226, 226, 221, 0.779);
 border-radius: 5px;
 margin-bottom: 10px;

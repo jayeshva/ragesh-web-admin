@@ -7,6 +7,15 @@ router.get('/', function (req, res) {
     res.render('feeds');
 });
 
+router.get('/getFeeds', async (req, res) => {
+    try {
+        const feeds = await Feed.find({});
+        res.status(200).json({ message: "Feeds fetched successfully", data: feeds });
+    } catch (error) {
+        res.status(500).json({ message: "Error occurred while fetching feeds", error: error.message });
+    }
+});
+
 router.post('/addFeed', async (req, res) => {
     try {
         const { feed_img, feed_name, feed_description, feed_source_url } = req.body;

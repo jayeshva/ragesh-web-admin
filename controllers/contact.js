@@ -8,6 +8,18 @@ router.get('/', function (req, res) {
     res.render('contacts');
 });
 
+// Function to get all contacts
+router.get('/getContacts', async (req, res) => {
+    try {
+        const contacts = await Contact.find({});
+        res.status(200).json({ message: "Contacts fetched successfully", data: contacts });
+    } catch (error) {
+        res.status(500).json({ message: "Error occurred while fetching contacts", error: error.message });
+    }
+});
+
+
+
 // Function to add a new contact
 router.post('/addContact', async (req, res) => {
     try {
