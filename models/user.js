@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     user_type: { type: String, default: "user"},
     user_mobile: { type: String, required: true },
     user_gender: { type: String, required: true },
-    user_aadhar: { type: String},
+    user_aadhaar: { type: String},
     user_pan: { type: String },
     user_status: { type: String, default: "deactive" },
     user_applied_schemes:[

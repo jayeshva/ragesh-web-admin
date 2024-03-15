@@ -20,9 +20,11 @@ var profile = require('./controllers/profile');
 var enroll = require('./controllers/enroll');
 var User = require('./models/user');
 var approvalProfile = require('./controllers/approvalProfile');
+var cors = require('cors');
 const port = 8000;
 
 app.use(fileUpload());
+app.use(cors());
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname+"/public"))
 mongoose.connect('mongodb+srv://jayeshcs20:jayeshcs20@farmeasydb.jpxxhts.mongodb.net/');
@@ -50,17 +52,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // const privateKey = fs.readFileSync('/etc/letsencrypt/live/platform.rampex.in/privkey.pem', 'utf8');
 // const certificate = fs.readFileSync('/etc/letsencrypt/live/platform.rampex.in/fullchain.pem', 'utf8');
-//const privateKey = fs.readFileSync('./rampex.key', 'utf8');
-//const certificate = fs.readFileSync('./rampex.crt', 'utf8');
-// const credentials = { key: privateKey, cert: certificate };
 
+const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
+const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 
 app.use('/dashboard', dashboard);
 app.use('/contacts', contact);
 app.use('/schemes', schemes);
 app.use('/feeds', feeds);
 app.use('/profile', profile);
-app.use('/enroll', enroll);
+app.use('/enroll', enroll); 
 app.use('/approvalProfile', approvalProfile);
 
 
@@ -73,18 +75,20 @@ app.post('/register/v2', async (req, res) => {
         const { user_name, user_email, user_password, user_mobile ,user_gender} = req.body;
         const token = crypto.randomBytes(20).toString('hex');
 
-        console.log(req.body)
-        console.log(req.files)
+        // console.log(req.body)
+        // console.log(req.files)
 
-        if (!req.files) {
+        if (!req.files || !req.files.user_aadhaar || !req.files.user_pan || !req.files.user_photo) {
             return res.status(400).json({ message: 'Upload a Mandatory files uploaded' });
         }
+        const user_aadhaar = req.files.user_aadhaar;
+        const user_pan = req.files.user_pan;
+        const user_photo = req.files.user_photo;
+    
         const transporter = nodemailer.createTransport({
-            service: 'Gmail', // Replace with your email service provider
-            auth: {
-                user: 'jayesh007va@gmail.com', // Replace with your email address
-                pass: 'zrxx fczv qote gtqp' // Replace with your email password or app password if using Gmail
-            }
+            service: 'Gmail',
+                user: 'jayesh007va@gmail.com', 
+                pass: 'zrxx fczv qote gtqp' 
            
         });
 
@@ -175,12 +179,13 @@ app.post('/login', async (req, res) => {
     try {
         const { user_email, user_password } = req.body;
         const user = await User.findOne({ user_email });
+        console.log(user);
 
         if (!user) {
             return res.status(401).json({ message: 'Authentication failed', status: 0 });
         }
         
-        const passwordMatch = await bcrypt.compare(user_password, user.user_password);
+        const passwordMatch = user_password === user.user_password;
 
         if (!passwordMatch) {
             return res.status(401).json({ message: 'Authentication failed', status: 0 });
@@ -231,12 +236,12 @@ app.post('/logout', function (req, res) {
 );
 
 
-app.listen(port, function () {
-    console.log(`Express server listening on port ${port}`);
-});
-// const httpsServer = https.createServer(credentials, app);
-
-
-// httpsServer.listen(port, function () {
-//     console.log(`Express server listening on port ${port} (HTTPS)`);
+// app.listen(port, function () {
+//     console.log(`Express server listening on port ${port}`);
 // });
+const httpsServer = https.createServer(credentials, app);
+
+
+httpsServer.listen(port, function () {
+    console.log(`Express server listening on port ${port} (HTTPS)`);
+});

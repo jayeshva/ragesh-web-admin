@@ -7,7 +7,23 @@ var Subsidy = require('../models/scheme');
 router.get('/', function (req, res) {
     var data = {};
     res.render('schemes');
+}); 
+
+router.get('/fetchScheme', async function (req, res) {
+    // Fetch all schemes from the database from latest to oldest
+    try {
+    var subsidyData = await Subsidy.find({});
+    var data = subsidyData.sort((a, b) => b.created_at - a.created_at);
+    res.status(200).json({ message: "Schemes fetched successfully", data: subsidyData });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error Occured While Fetching Schemes", error: error.message });
+    }
+    
+    
 });
+
+
 
 // Function to add a new scheme
 router.post('/addScheme', async (req, res) => {
