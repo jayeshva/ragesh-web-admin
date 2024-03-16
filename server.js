@@ -19,6 +19,8 @@ var feeds = require('./controllers/feeds');
 var profile = require('./controllers/profile');
 var enroll = require('./controllers/enroll');
 var User = require('./models/user');
+var Feed = require('./models/feeds');
+var Contact = require('./models/contact');
 var approvalProfile = require('./controllers/approvalProfile');
 var cors = require('cors');
 const port = 8000;
@@ -27,6 +29,7 @@ app.use(fileUpload());
 app.use(cors());
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname+"/public"))
+app.use("/uploads", express.static(__dirname+"/uploads"))
 mongoose.connect('mongodb+srv://jayeshcs20:jayeshcs20@farmeasydb.jpxxhts.mongodb.net/');
 
 var db = mongoose.connection;
@@ -81,14 +84,46 @@ app.post('/register/v2', async (req, res) => {
         if (!req.files || !req.files.user_aadhaar || !req.files.user_pan || !req.files.user_photo) {
             return res.status(400).json({ message: 'Upload a Mandatory files uploaded' });
         }
-        const user_aadhaar = req.files.user_aadhaar;
-        const user_pan = req.files.user_pan;
-        const user_photo = req.files.user_photo;
+
+        const imgFile = req.files.user_photo;
+        const aadharFile = req.files.user_aadhaar;
+        const panFile = req.files.user_pan;
+
+
+
+
+        // Get file extension
+        const imgfileExt = path.extname(imgFile.name);
+        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG','.pdf','.PDF'].includes(imgfileExt)) {
+            return res.status(600).json({ message: 'Only image and pdf files are allowed' });
+        }
+
+        const aadharFileExt = path.extname(aadharFile.name);
+        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG','.pdf','.PDF'].includes(aadharFileExt)) {
+            return res.status(600).json({ message: 'Only image and pdf files are allowed' });
+        }
+        const panFileExt = path.extname(panFile.name);
+        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG','.pdf','.PDF'].includes(panFileExt)) {
+            return res.status(600).json({ message: 'Only image and pdf files are allowed' });
+        }
+
+        const user_aadhaar = `./profile_uploads/${user_email}${Date.now()}_aadhar${aadharFileExt}`;
+        const user_pan = `./profile_uploads/${user_email}${Date.now()}_pan${panFileExt}`;
+        const user_photo = `./profile_uploads/${user_email}${Date.now()}_photo${imgfileExt}`;
+
+        await imgFile.mv(user_photo);
+        await aadharFile.mv(user_aadhaar);
+        await panFile.mv(user_pan);
+
+        
+
     
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
                 user: 'jayesh007va@gmail.com', 
-                pass: 'zrxx fczv qote gtqp' 
+                pass: 'rtws hlck rszj qzdv'
+                //'fbml xlep wjrz csgd' 
+                //rtws hlck rszj qzdv
            
         });
 
@@ -100,6 +135,9 @@ app.post('/register/v2', async (req, res) => {
         else {
             // Create a new user
             const newUser = new User({
+                user_img: user_photo,
+                user_aadhaar,
+                user_pan,
                 user_name,
                 user_email,
                 user_password,
@@ -235,13 +273,202 @@ app.post('/logout', function (req, res) {
 }
 );
 
+app.post('/addFeed', async (req, res) => {
+    try {
+        const { feed_name, feed_description, feed_source_url } = req.body;
+        if (!req.files||!req.files.imgFile) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+        // Assuming imgFile is the name attribute of the file input field in your form
+        const imgFile = req.files.imgFile;
 
-// app.listen(port, function () {
-//     console.log(`Express server listening on port ${port}`);
-// });
-const httpsServer = https.createServer(credentials, app);
+        // Get file extension
+        const fileExt = path.extname(imgFile.name);
+        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG'].includes(fileExt)) {
+            return res.status(600).json({ message: 'Only image files are allowed' });
+        }
 
+        // Generate a unique filename with timestamp
+        const filename = `feed_img_${Date.now()}${fileExt}`;
 
-httpsServer.listen(port, function () {
-    console.log(`Express server listening on port ${port} (HTTPS)`);
+        // Save file to the uploads directory
+        await imgFile.mv(`./uploads/${filename}`);
+
+        // Create new Feed object
+        const newFeed = new Feed({
+            feed_img: `/uploads/${filename}`, // Store file path in database
+            feed_name: req.body.feed_name,
+            feed_description: req.body.feed_description,
+            feed_source_url: req.body.feed_source_url
+        });
+
+        // Save new feed to the database
+        const savedFeed = await newFeed.save();
+
+        res.status(200).json({ message: 'Feed added successfully', data: savedFeed });
+    } catch (error) {
+        console.error('Error occurred while adding feed:', error);
+        res.status(500).json({ message: 'Error occurred while adding feed', error: error.message });
+    }
 });
+
+// Route to update a feed
+app.put('/updateFeed/:id', async (req, res) => {
+    try {
+        if (req.files) {
+
+            const imgFile = req.files.imgFile;
+
+            // Get file extension
+            const fileExt = path.extname(imgFile.name);
+            if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG'].includes(fileExt)) {
+                return res.status(600).json({ message: 'Only image files are allowed' });
+            }
+    
+            // Generate a unique filename with timestamp
+            const filename = `feed_img_${Date.now()}${fileExt}`;
+    
+            // Save file to the uploads directory
+            await imgFile.mv(`./uploads/${filename}`);
+    
+            const updatedFeed = await Feed.findByIdAndUpdate({_id:req.params.id});
+            if (!updatedFeed) {
+                return res.status(404).json({ message: "Feed not found" });
+            }
+            updatedFeed.feed_img = `/uploads/${filename}`;
+            updatedFeed.feed_name = req.body.feed_name;
+            updatedFeed.feed_description = req.body.feed_description;
+            updatedFeed.feed_source_url = req.body.feed_source_url;
+            await updatedFeed.save();
+    
+            return res.status(200).json({ message: "Feed updated successfully", data: updatedFeed });
+            
+        }
+        
+        const updatedFeed = await Feed.findByIdAndUpdate({_id:req.params.id});
+        if (!updatedFeed) {
+            return res.status(404).json({ message: "Feed not found" });
+        }
+        updatedFeed.feed_name = req.body.feed_name;
+        updatedFeed.feed_description = req.body.feed_description;
+        updatedFeed.feed_source_url = req.body.feed_source_url;
+        await updatedFeed.save();
+
+       return res.status(200).json({ message: "Feed updated successfully", data: updatedFeed });
+
+     
+    } catch (error) {
+        res.status(500).json({ message: "Error occurred while updating feed", error: error.message });
+    }
+});
+
+
+
+app.post('/addContact', async (req, res) => {
+    try {
+        if (!req.files||!req.files.imgFile) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+        // Assuming imgFile is the name attribute of the file input field in your form
+        const imgFile = req.files.imgFile;
+
+        // Get file extension
+        const fileExt = path.extname(imgFile.name);
+        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG'].includes(fileExt)) {
+            return res.status(600).json({ message: 'Only image files are allowed' });
+        }
+
+        // Generate a unique filename with timestamp
+        const filename = `contact_img_${Date.now()}${fileExt}`;
+
+        // Save file to the uploads directory
+        await imgFile.mv(`./uploads/${filename}`);
+
+        const { contact_name, contact_email, contact_mobile, contact_locality, contact_organisation, contact_designation } = req.body;
+        // Creating a new contact instance with the data from the request body
+        const newContact = new Contact({
+            contact_img: `/uploads/${filename}`, // Store file path in database
+            contact_name,
+            contact_email,
+            contact_mobile,
+            contact_locality,
+            contact_organisation,
+            contact_designation
+        });
+        // Saving the new contact to the database
+        const savedContact = await newContact.save();
+        res.status(200).json({ message: 'Contact added successfully', data: savedContact });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+
+// Route to update a contact by ID
+app.put('/editContact/:id', async (req, res) => {
+    try {
+
+        if(req.files){
+            console.log(req.files)
+            const imgFile = req.files.imgFile;
+
+            // Get file extension
+            const fileExt = path.extname(imgFile.name);
+            if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG'].includes(fileExt)) {
+                return res.status(600).json({ message: 'Only image files are allowed' });
+            }
+    
+            // Generate a unique filename with timestamp
+            const filename = `contact_img_${Date.now()}${fileExt}`;
+    
+            // Save file to the uploads directory
+            await imgFile.mv(`./uploads/${filename}`);
+            var updatedContact = await Contact.findOne({contact_email:req.params.id});
+            if (!updatedContact) {
+                return res.status(404).json({ message: "Contact not found" });
+            }
+            updatedContact.contact_img = `/uploads/${filename}`;
+            updatedContact.contact_name = req.body.contact_name;
+            updatedContact.contact_email = req.body.contact_email;
+            updatedContact.contact_mobile = req.body.contact_mobile;
+            updatedContact.contact_organisation = req.body.contact_organisation;
+            updatedContact.contact_locality = req.body.contact_locality;
+            updatedContact.contact_designation = req.body.contact_designation;
+            await updatedContact.save();
+            return res.status(200).json({ message: "Contact updated successfully", data: updatedContact });
+
+
+            
+
+        }
+        else{
+            var updatedContact = await Contact.findOne({contact_email:req.params.id});
+            if (!updatedContact) {
+                return res.status(404).json({ message: "Contact not found" });
+            }
+            updatedContact.contact_name = req.body.contact_name;
+            updatedContact.contact_email = req.body.contact_email;
+            updatedContact.contact_mobile = req.body.contact_mobile;
+            updatedContact.contact_organisation = req.body.contact_organisation;
+            updatedContact.contact_locality = req.body.contact_locality;
+            await updatedContact.save();
+            return res.status(200).json({ message: "Contact updated successfully", data: updatedContact });
+        }
+        
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+
+app.listen(port, function () {
+    console.log(`Express server listening on port ${port}`);
+});
+
+// const httpsServer = https.createServer(credentials, app);
+
+
+// httpsServer.listen(port, function () {
+//     console.log(`Express server listening on port ${port} (HTTPS)`);
+// });

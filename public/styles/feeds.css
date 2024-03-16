@@ -51,6 +51,8 @@ body {
 }
 
 .card {
+  
+  width: 800px;
     background-color: #f9fbfd;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -61,7 +63,7 @@ body {
 
   .card-image {
     flex: 0 0 30%;
-    height: 100px;
+    height: 150px;
     width: 100px;
   }
 
@@ -167,7 +169,7 @@ body {
     position: fixed;
     display: none;
     width: fit-content;
-    margin-top: 150px;
+    margin-top: 100px;
     z-index: 5;
     margin-left: 500px;
     padding: 40px;
@@ -213,7 +215,7 @@ body {
     position: fixed;
     display: none;
     width: fit-content;
-    margin-top: 150px;
+    margin-top: 100px;
     z-index: 5;
     margin-left: 500px;
     padding: 40px;

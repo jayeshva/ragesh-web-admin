@@ -7,6 +7,7 @@ const contactSchema = new mongoose.Schema({
     contact_mobile: { type: String, required: true },
     contact_organisation: { type: String, required: true },
     contact_locality: { type: String, required: true },
+    contact_designation: { type: String, required: true },
     created_at: { type: Date, default: Date.now }
 });
 

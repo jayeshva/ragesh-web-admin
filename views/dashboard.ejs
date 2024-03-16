@@ -63,28 +63,28 @@
     <div class="dashboard">
         <div class="widget">
             <h3>Schemes</h3>
-            <p id="schemesCount">0</p>
+            <p id="schemesCount"><%= totalSubsidy %></p>
         </div>
         <div class="widget">
             <h3>Contacts</h3>
-            <p id="contactsCount">0</p>
+            <p id="contactsCount"><%=totalContacts %></p>
         </div>
 
         <div class="widget">
             <h3>Pending Requests</h3>
-            <p id="pendingRequests">0</p>
+            <p id="pendingRequests"><%= totalunderReview %></p>
         </div>
         <div class="widget">
             <h3>Active Users</h3>
-            <p id="total_users_count">0</p>
+            <p id="total_users_count"><%=totalUsers %></p>
         </div>
         <div class="widget">
             <h3>Approved Requests</h3>
-            <p id="approvedCount">0</p>
+            <p id="approvedCount"><%= totalApproved %></p>
         </div>
         <div class="widget">
             <h3>Rejected Requests</h3>
-            <p id="rejectedCount">0</p>
+            <p id="rejectedCount"><%= totalRejected %></p>
         </div>
     </div>
     <script src="/public/js/dashboard.js"></script>
