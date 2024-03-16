@@ -30,6 +30,8 @@ app.use(cors());
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname+"/public"))
 app.use("/uploads", express.static(__dirname+"/uploads"))
+app.use("/profile_uploads", express.static(__dirname+"/profile_uploads"))
+
 mongoose.connect('mongodb+srv://jayeshcs20:jayeshcs20@farmeasydb.jpxxhts.mongodb.net/');
 
 var db = mongoose.connection;
@@ -51,6 +53,7 @@ app.use(session({
         sameSite: 'none'
     },
 }));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // const privateKey = fs.readFileSync('/etc/letsencrypt/live/platform.rampex.in/privkey.pem', 'utf8');
@@ -76,8 +79,7 @@ app.get('/', function (req, res) {
 app.post('/register/v2', async (req, res) => {
     try {
         const { user_name, user_email, user_password, user_mobile ,user_gender} = req.body;
-        const token = crypto.randomBytes(20).toString('hex');
-
+        console.log(req.body)
         // console.log(req.body)
         // console.log(req.files)
 
@@ -115,40 +117,83 @@ app.post('/register/v2', async (req, res) => {
         await aadharFile.mv(user_aadhaar);
         await panFile.mv(user_pan);
 
-        
-
-    
+       
+        // const user_type = "student";
+        const token = crypto.randomBytes(20).toString('hex');
+        // const user_type = "student";
         const transporter = nodemailer.createTransport({
-            service: 'Gmail',
-                user: 'jayesh007va@gmail.com', 
-                pass: 'rtws hlck rszj qzdv'
-                //'fbml xlep wjrz csgd' 
-                //rtws hlck rszj qzdv
-           
+            service: 'Gmail', // Replace with your email service provider
+            // auth: {
+            //     user: 'jayesh007va@gmail.com', // Replace with your email address
+            //     pass: 'zrxx fczv qote gtqp' // Replace with your email password or app password if using Gmail
+            // }
+            auth: {
+                user: 'jayesh007va@gmail.com', // Replace with your email address
+                pass: 'rtws hlck rszj qzdv' // Replace with your email password or app password if using Gmail
+            }
         });
 
         // Check if the email already exists
         const existingUser = await User.findOne({ user_email });
-        if (existingUser) {
+        if (existingUser && existingUser.user_status == "active") {
             return res.status(400).json({ message: 'Email already registered', status: 0 });
+        }
+        else if (existingUser && existingUser.user_status == "deactive") {
+            existingUser.user_name = user_name;
+            existingUser.user_password = user_password;
+            existingUser.user_mobile = user_mobile;
+            existingUser.user_gender = user_gender;
+            existingUser.user_img = user_photo;
+            existingUser.user_aadhaar = user_aadhaar;
+            existingUser.user_pan = user_pan;
+
+            // Save the user to the database
+            existingUser.confirmationToken = token;
+
+            // Email content with confirmation link
+            const confirmationLink = `https://localhost:4000/confirm/${token}`; // Replace with your confirmation route
+            const mailOptions = {
+                from: 'jayesh007va@gmail.com', // Sender address
+                to: user_email, // Receiver's email
+                subject: 'Registration Confirmation', // Email subject
+                text: `Hello ${user_name},\n\nPlease click on the following link to confirm your registration:\n${confirmationLink}`, // Email body
+            };
+
+            // Send the email
+            transporter.sendMail(mailOptions, async (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                    // Handle error in sending email
+                    return res.status(500).json({ message: 'Error sending confirmation email', status: 0 });
+                }
+                console.log('Email sent:', info.response);
+                await existingUser.save();
+                // Email sent successfully
+                res.status(201).json({ message: 'User registered successfully. ReConfirmation email sent.', status: 1, user: existingUser });
+            });
+
         }
         else {
             // Create a new user
             const newUser = new User({
-                user_img: user_photo,
-                user_aadhaar,
-                user_pan,
                 user_name,
                 user_email,
                 user_password,
-                user_mobile,
-                user_gender
+                user_mobile:user_mobile,
+                user_gender,
+                user_img: user_photo,
+                user_aadhaar,
+                user_pan
             });
 
+            // Save the user to the database
             newUser.confirmationToken = token;
 
+
+
+
             // Email content with confirmation link
-            const confirmationLink = `http://localhost:8000/confirm/${token}`; // Replace with your confirmation route
+            const confirmationLink = `https://localhost:4000/confirm/${token}`; // Replace with your confirmation route
             const mailOptions = {
                 from: 'jayesh007va@gmail.com', // Sender address
                 to: user_email, // Receiver's email
@@ -171,6 +216,63 @@ app.post('/register/v2', async (req, res) => {
 
             // Hash the password
         }
+
+        
+
+    
+        // const transporter = nodemailer.createTransport({
+        //     service: 'Gmail',
+        //         user: 'jayesh007va@gmail.com', 
+        //         pass: 'rtws hlck rszj qzdv'
+        //         //'fbml xlep wjrz csgd' 
+        //         //rtws hlck rszj qzdv
+           
+        // });
+
+        // // Check if the email already exists
+        // const existingUser = await User.findOne({ user_email });
+        // if (existingUser) {
+        //     return res.status(400).json({ message: 'Email already registered', status: 0 });
+        // }
+        // else {
+        //     // Create a new user
+        //     const newUser = new User({
+        //         user_img: user_photo,
+        //         user_aadhaar,
+        //         user_pan,
+        //         user_name,
+        //         user_email,
+        //         user_password,
+        //         user_mobile,
+        //         user_gender
+        //     });
+
+        //     newUser.confirmationToken = token;
+
+        //     // Email content with confirmation link
+        //     const confirmationLink = `http://localhost:8000/confirm/${token}`; // Replace with your confirmation route
+        //     const mailOptions = {
+        //         from: 'jayesh007va@gmail.com', // Sender address
+        //         to: user_email, // Receiver's email
+        //         subject: 'Registration Confirmation', // Email subject
+        //         text: `Hello ${user_name},\n\nPlease click on the following link to confirm your registration:\n${confirmationLink}`, // Email body
+        //     };
+
+        //     // Send the email
+        //     transporter.sendMail(mailOptions, async (error, info) => {
+        //         if (error) {
+        //             console.error('Error sending email:', error);
+        //             // Handle error in sending email
+        //             return res.status(500).json({ message: 'Error sending confirmation email', status: 0 });
+        //         }
+        //         console.log('Email sent:', info.response);
+        //         await newUser.save();
+        //         // Email sent successfully
+        //         res.status(201).json({ message: 'User registered successfully. Confirmation email sent.', status: 1, user: newUser });
+        //     });
+
+        //     // Hash the password
+        // }
 
     } catch (error) {
         console.error("Error in user registration: ", error);
@@ -410,7 +512,7 @@ app.put('/editContact/:id', async (req, res) => {
     try {
 
         if(req.files){
-            console.log(req.files)
+            // console.log(req.files)
             const imgFile = req.files.imgFile;
 
             // Get file extension
@@ -462,13 +564,13 @@ app.put('/editContact/:id', async (req, res) => {
 });
 
 
-app.listen(port, function () {
-    console.log(`Express server listening on port ${port}`);
-});
-
-// const httpsServer = https.createServer(credentials, app);
-
-
-// httpsServer.listen(port, function () {
-//     console.log(`Express server listening on port ${port} (HTTPS)`);
+// app.listen(port, function () {
+//     console.log(`Express server listening on port ${port}`);
 // });
+
+const httpsServer = https.createServer(credentials, app);
+
+
+httpsServer.listen(port, function () {
+    console.log(`Express server listening on port ${port} (HTTPS)`);
+});

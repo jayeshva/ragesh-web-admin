@@ -150,7 +150,7 @@
                         <P style="margin-left: 25px; margin-top: 7px;">Edit</P>
                     </div>
 
-                    <div onclick="openEnroll()" style=" display: block;height: 30px; width: 125px;margin-left: 10px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
+                    <div onclick="openEnroll('<%= scheme._id  %>')" style=" display: block;height: 30px; width: 125px;margin-left: 10px; background-color: rgb(9, 9, 117); color: #fff; font-size: 15px; 
             border-radius: 3px; cursor: pointer;">
                         <P style="margin-left: 25px; margin-top: 7px;"> View Enroll</P>
                     </div>
@@ -211,9 +211,9 @@
             document.getElementById('viewDescSchemeName').textContent = scheme_name;
         }
 
-        function openEnroll(){
-
-            window.location.href = "enroll";
+        async function openEnroll(id){
+           window.location.href='/enroll/'+id;
+            
         } 
 
         async function addScheme(){

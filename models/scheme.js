@@ -12,6 +12,7 @@ const subsidySchema = new mongoose.Schema({
             user_email: { type: String },
             user_mobile: { type: String },
             status: { type: String, default: "Under Review" }, 
+            comment: { type: String, default: "No Comment" },
             created_at: { type: Date, default: Date.now }
         }
     ],

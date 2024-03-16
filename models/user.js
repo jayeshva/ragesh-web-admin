@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
             scheme_name: { type: String },
             scheme_category: { type: String },
             status: { type: String, default: "Under Review" },
+            comment: { type: String, default: "No Comment" },
             created_at: { type: Date, default: Date.now }
         }
     ],
