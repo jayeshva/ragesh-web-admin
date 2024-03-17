@@ -11,7 +11,7 @@ const https = require('https'); // Include the 'https' module
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 var cookieParser = require('cookie-parser');
-var cors = require('cors');  
+var cors = require('cors');
 var dashboard = require('./controllers/dashboard');
 var contact = require('./controllers/contact');
 var schemes = require('./controllers/schemes');
@@ -28,9 +28,9 @@ const port = 8000;
 app.use(fileUpload());
 app.use(cors());
 app.set('view engine', 'ejs');
-app.use("/public", express.static(__dirname+"/public"))
-app.use("/uploads", express.static(__dirname+"/uploads"))
-app.use("/profile_uploads", express.static(__dirname+"/profile_uploads"))
+app.use("/public", express.static(__dirname + "/public"))
+app.use("/uploads", express.static(__dirname + "/uploads"))
+app.use("/profile_uploads", express.static(__dirname + "/profile_uploads"))
 
 mongoose.connect('mongodb+srv://jayeshcs20:jayeshcs20@farmeasydb.jpxxhts.mongodb.net/');
 
@@ -68,7 +68,7 @@ app.use('/contacts', contact);
 app.use('/schemes', schemes);
 app.use('/feeds', feeds);
 app.use('/profile', profile);
-app.use('/enroll', enroll); 
+app.use('/enroll', enroll);
 app.use('/approvalProfile', approvalProfile);
 
 
@@ -78,10 +78,7 @@ app.get('/', function (req, res) {
 
 app.post('/register/v2', async (req, res) => {
     try {
-        const { user_name, user_email, user_password, user_mobile ,user_gender} = req.body;
-        console.log(req.body)
-        // console.log(req.body)
-        // console.log(req.files)
+        const { user_name, user_email, user_password, user_mobile, user_gender } = req.body;
 
         if (!req.files || !req.files.user_aadhaar || !req.files.user_pan || !req.files.user_photo) {
             return res.status(400).json({ message: 'Upload a Mandatory files uploaded' });
@@ -96,16 +93,16 @@ app.post('/register/v2', async (req, res) => {
 
         // Get file extension
         const imgfileExt = path.extname(imgFile.name);
-        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG','.pdf','.PDF'].includes(imgfileExt)) {
+        if (!['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG', '.pdf', '.PDF'].includes(imgfileExt)) {
             return res.status(600).json({ message: 'Only image and pdf files are allowed' });
         }
 
         const aadharFileExt = path.extname(aadharFile.name);
-        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG','.pdf','.PDF'].includes(aadharFileExt)) {
+        if (!['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG', '.pdf', '.PDF'].includes(aadharFileExt)) {
             return res.status(600).json({ message: 'Only image and pdf files are allowed' });
         }
         const panFileExt = path.extname(panFile.name);
-        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG','.pdf','.PDF'].includes(panFileExt)) {
+        if (!['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG', '.pdf', '.PDF'].includes(panFileExt)) {
             return res.status(600).json({ message: 'Only image and pdf files are allowed' });
         }
 
@@ -117,16 +114,20 @@ app.post('/register/v2', async (req, res) => {
         await aadharFile.mv(user_aadhaar);
         await panFile.mv(user_pan);
 
-       
-        // const user_type = "student";
-        const token = crypto.randomBytes(20).toString('hex');
+
+        // Generate random bytes
+        const randomBytes = crypto.randomBytes(2); // 2 bytes are enough for a six-digit number
+
+        // Convert random bytes to hexadecimal representation
+        const hexString = randomBytes.toString('hex');
+
+        // Convert hexadecimal string to a number and ensure it's a six-digit number
+        const token = parseInt(hexString, 16) % 900000 + 100000; // Ensures a six-digit number
+
+        // console.log(token);
         // const user_type = "student";
         const transporter = nodemailer.createTransport({
             service: 'Gmail', // Replace with your email service provider
-            // auth: {
-            //     user: 'jayesh007va@gmail.com', // Replace with your email address
-            //     pass: 'zrxx fczv qote gtqp' // Replace with your email password or app password if using Gmail
-            // }
             auth: {
                 user: 'jayesh007va@gmail.com', // Replace with your email address
                 pass: 'rtws hlck rszj qzdv' // Replace with your email password or app password if using Gmail
@@ -156,7 +157,23 @@ app.post('/register/v2', async (req, res) => {
                 from: 'jayesh007va@gmail.com', // Sender address
                 to: user_email, // Receiver's email
                 subject: 'Registration Confirmation', // Email subject
-                text: `Hello ${user_name},\n\nPlease click on the following link to confirm your registration:\n${confirmationLink}`, // Email body
+                html: `<html>
+                <head>
+                    <style>
+                        h1 { color: #007bff; }
+                        p { font-size: 16px; }
+                        .otp { font-size: 24px; color: #dc3545; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Hello ${user_name},</h2>
+                    <p>Thank you for registering with us!</p>
+                    <div>
+                        <p>Your six digit OTP is:</p>
+                        <h1 class="otp">${token}</h1>
+                    </div>
+                </body>
+            </html>`, // Email body
             };
 
             // Send the email
@@ -169,7 +186,7 @@ app.post('/register/v2', async (req, res) => {
                 console.log('Email sent:', info.response);
                 await existingUser.save();
                 // Email sent successfully
-                res.status(201).json({ message: 'User registered successfully. ReConfirmation email sent.', status: 1, user: existingUser });
+                res.status(200).json({ message: 'User registered successfully. ReConfirmation email sent.', status: 1, user: existingUser });
             });
 
         }
@@ -179,7 +196,7 @@ app.post('/register/v2', async (req, res) => {
                 user_name,
                 user_email,
                 user_password,
-                user_mobile:user_mobile,
+                user_mobile: user_mobile,
                 user_gender,
                 user_img: user_photo,
                 user_aadhaar,
@@ -198,8 +215,25 @@ app.post('/register/v2', async (req, res) => {
                 from: 'jayesh007va@gmail.com', // Sender address
                 to: user_email, // Receiver's email
                 subject: 'Registration Confirmation', // Email subject
-                text: `Hello ${user_name},\n\nPlease click on the following link to confirm your registration:\n${confirmationLink}`, // Email body
+                html: `<html>
+                <head>
+                    <style>
+                        h1 { color: #007bff; }
+                        p { font-size: 16px; }
+                        .otp { font-size: 24px; color: #dc3545; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Hello ${user_name},</h2>
+                    <p>Thank you for registering with us!</p>
+                    <div>
+                        <p>Your six digit OTP is:</p>
+                        <h1 class="otp">${token}</h1>
+                    </div>
+                </body>
+            </html>`, // Email body with HTML formatting
             };
+            
 
             // Send the email
             transporter.sendMail(mailOptions, async (error, info) => {
@@ -211,22 +245,22 @@ app.post('/register/v2', async (req, res) => {
                 console.log('Email sent:', info.response);
                 await newUser.save();
                 // Email sent successfully
-                res.status(201).json({ message: 'User registered successfully. Confirmation email sent.', status: 1, user: newUser });
+                res.status(200).json({ message: 'User registered successfully. Confirmation email sent.', status: 1, user: newUser });
             });
 
             // Hash the password
         }
 
-        
 
-    
+
+
         // const transporter = nodemailer.createTransport({
         //     service: 'Gmail',
         //         user: 'jayesh007va@gmail.com', 
         //         pass: 'rtws hlck rszj qzdv'
         //         //'fbml xlep wjrz csgd' 
         //         //rtws hlck rszj qzdv
-           
+
         // });
 
         // // Check if the email already exists
@@ -306,6 +340,32 @@ app.get('/confirm/:token', async (req, res) => {
     }
 });
 
+app.get('/verify/:token', async (req, res) => {
+    try {
+        const token = req.params.token;
+
+        // Find the user by the confirmation token
+        const user = await User.findOne({ confirmationToken: token });
+
+        if (!user) {
+            // Handle invalid or expired token
+            return res.status(400).json({ message: 'Invalid or expired confirmation link', status: 0 });
+        }
+
+        // Update the user's status to confirmed (or perform any necessary actions)
+        user.user_status = 'active';
+        user.confirmationToken = null; // Optionally clear the token after confirmation
+        await user.save();
+
+        // Redirect the user to a success page or send a confirmation message
+        res.status(200).json({ message: 'User registration confirmed successfully', status: 1 });
+
+    } catch (error) {
+        console.error("Error confirming user registration: ", error);
+        res.status(500).json({ message: 'Internal Server Error', status: 0 });
+    }
+});
+
 app.get('/login', async function (req, res) {
     res.render('login');
 });
@@ -324,7 +384,7 @@ app.post('/login', async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: 'Authentication failed', status: 0 });
         }
-        
+
         const passwordMatch = user_password === user.user_password;
 
         if (!passwordMatch) {
@@ -378,7 +438,7 @@ app.post('/logout', function (req, res) {
 app.post('/addFeed', async (req, res) => {
     try {
         const { feed_name, feed_description, feed_source_url } = req.body;
-        if (!req.files||!req.files.imgFile) {
+        if (!req.files || !req.files.imgFile) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
         // Assuming imgFile is the name attribute of the file input field in your form
@@ -386,7 +446,7 @@ app.post('/addFeed', async (req, res) => {
 
         // Get file extension
         const fileExt = path.extname(imgFile.name);
-        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG'].includes(fileExt)) {
+        if (!['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG'].includes(fileExt)) {
             return res.status(600).json({ message: 'Only image files are allowed' });
         }
 
@@ -423,17 +483,17 @@ app.put('/updateFeed/:id', async (req, res) => {
 
             // Get file extension
             const fileExt = path.extname(imgFile.name);
-            if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG'].includes(fileExt)) {
+            if (!['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG'].includes(fileExt)) {
                 return res.status(600).json({ message: 'Only image files are allowed' });
             }
-    
+
             // Generate a unique filename with timestamp
             const filename = `feed_img_${Date.now()}${fileExt}`;
-    
+
             // Save file to the uploads directory
             await imgFile.mv(`./uploads/${filename}`);
-    
-            const updatedFeed = await Feed.findByIdAndUpdate({_id:req.params.id});
+
+            const updatedFeed = await Feed.findByIdAndUpdate({ _id: req.params.id });
             if (!updatedFeed) {
                 return res.status(404).json({ message: "Feed not found" });
             }
@@ -442,12 +502,12 @@ app.put('/updateFeed/:id', async (req, res) => {
             updatedFeed.feed_description = req.body.feed_description;
             updatedFeed.feed_source_url = req.body.feed_source_url;
             await updatedFeed.save();
-    
+
             return res.status(200).json({ message: "Feed updated successfully", data: updatedFeed });
-            
+
         }
-        
-        const updatedFeed = await Feed.findByIdAndUpdate({_id:req.params.id});
+
+        const updatedFeed = await Feed.findByIdAndUpdate({ _id: req.params.id });
         if (!updatedFeed) {
             return res.status(404).json({ message: "Feed not found" });
         }
@@ -456,9 +516,9 @@ app.put('/updateFeed/:id', async (req, res) => {
         updatedFeed.feed_source_url = req.body.feed_source_url;
         await updatedFeed.save();
 
-       return res.status(200).json({ message: "Feed updated successfully", data: updatedFeed });
+        return res.status(200).json({ message: "Feed updated successfully", data: updatedFeed });
 
-     
+
     } catch (error) {
         res.status(500).json({ message: "Error occurred while updating feed", error: error.message });
     }
@@ -468,7 +528,7 @@ app.put('/updateFeed/:id', async (req, res) => {
 
 app.post('/addContact', async (req, res) => {
     try {
-        if (!req.files||!req.files.imgFile) {
+        if (!req.files || !req.files.imgFile) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
         // Assuming imgFile is the name attribute of the file input field in your form
@@ -476,7 +536,7 @@ app.post('/addContact', async (req, res) => {
 
         // Get file extension
         const fileExt = path.extname(imgFile.name);
-        if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG'].includes(fileExt)) {
+        if (!['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG'].includes(fileExt)) {
             return res.status(600).json({ message: 'Only image files are allowed' });
         }
 
@@ -511,22 +571,22 @@ app.post('/addContact', async (req, res) => {
 app.put('/editContact/:id', async (req, res) => {
     try {
 
-        if(req.files){
+        if (req.files) {
             // console.log(req.files)
             const imgFile = req.files.imgFile;
 
             // Get file extension
             const fileExt = path.extname(imgFile.name);
-            if (!['.png', '.jpg', '.jpeg','.PNG','.JPG','.JPEG'].includes(fileExt)) {
+            if (!['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG'].includes(fileExt)) {
                 return res.status(600).json({ message: 'Only image files are allowed' });
             }
-    
+
             // Generate a unique filename with timestamp
             const filename = `contact_img_${Date.now()}${fileExt}`;
-    
+
             // Save file to the uploads directory
             await imgFile.mv(`./uploads/${filename}`);
-            var updatedContact = await Contact.findOne({contact_email:req.params.id});
+            var updatedContact = await Contact.findOne({ contact_email: req.params.id });
             if (!updatedContact) {
                 return res.status(404).json({ message: "Contact not found" });
             }
@@ -541,11 +601,11 @@ app.put('/editContact/:id', async (req, res) => {
             return res.status(200).json({ message: "Contact updated successfully", data: updatedContact });
 
 
-            
+
 
         }
-        else{
-            var updatedContact = await Contact.findOne({contact_email:req.params.id});
+        else {
+            var updatedContact = await Contact.findOne({ contact_email: req.params.id });
             if (!updatedContact) {
                 return res.status(404).json({ message: "Contact not found" });
             }
@@ -557,7 +617,7 @@ app.put('/editContact/:id', async (req, res) => {
             await updatedContact.save();
             return res.status(200).json({ message: "Contact updated successfully", data: updatedContact });
         }
-        
+
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

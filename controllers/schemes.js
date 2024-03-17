@@ -17,9 +17,9 @@ router.get('/', async (req, res) => {
         scheme.slast_date = last_date ;
         scheme.screated_at = created_at;
 
+
         
     });
-
     
     res.render('schemes', { schemes: schemeData });
 });
@@ -28,9 +28,21 @@ router.get('/', async (req, res) => {
 router.get('/getScheme', async function (req, res) {
     // Fetch all schemes from the database from latest to oldest
     try {
-        var subsidyData = await Subsidy.find({});
-        var data = subsidyData.sort((a, b) => b.created_at - a.created_at);
-        res.status(200).json({ message: "Schemes fetched successfully", data: subsidyData });
+        var schemeData = await Subsidy.find({}).sort({ created_at: -1 });
+        schemeData.forEach(scheme => {
+            scheme.approved_count = scheme.applied_users.filter(user => user.status === 'Approved').length;
+            scheme.rejected_count = scheme.applied_users.filter(user => user.status === 'Rejected').length;
+            scheme.pending_count = scheme.applied_users.filter(user => user.status === 'Under Review').length;
+            scheme.total_count = scheme.applied_users.length;
+            var last_date = new Date(scheme.last_date).toLocaleDateString('en-GB',{ day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
+            var created_at = new Date(scheme.created_at).toLocaleDateString('en-GB',{ day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
+            scheme.slast_date = last_date ;
+            scheme.screated_at = created_at;
+   
+        });
+
+       
+        res.status(200).json({ message: "Schemes fetched successfully", data: schemeData });
     }
     catch (error) {
         res.status(500).json({ message: "Error Occured While Fetching Schemes", error: error.message });
