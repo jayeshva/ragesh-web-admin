@@ -79,7 +79,8 @@ app.get('/', function (req, res) {
 app.post('/register/v2', async (req, res) => {
     try {
         const { user_name, user_email, user_password, user_mobile, user_gender } = req.body;
-
+        console.log(req.body);
+        console.log(req.files);
         if (!req.files || !req.files.user_aadhaar || !req.files.user_pan || !req.files.user_photo) {
             return res.status(400).json({ message: 'Upload a Mandatory files uploaded' });
         }
