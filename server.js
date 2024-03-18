@@ -382,12 +382,17 @@ app.get('/register', async function (req, res) {
 app.post('/login', async (req, res) => {
     try {
         const { user_email, user_password } = req.body;
+        var applied = 0;
+        var approved = 0;
+        var rejected = 0;
+        var underReview = 0;
         const user = await User.findOne({ user_email });
         // console.log(user);
 
         if (!user) {
             return res.status(401).json({ message: 'Authentication failed', status: 0 });
         }
+
 
         const passwordMatch = user_password === user.user_password;
 
@@ -401,10 +406,22 @@ app.post('/login', async (req, res) => {
         if (user.user_status === 'disabled') {
             return res.status(401).json({ message: 'Verify your Email Through Confirmation Link', status: 3 });
         }
+        applied = user.user_applied_schemes.length;
+        user.user_applied_schemes.forEach(element => {
+            if (element.status === 'Approved') {
+                approved++;
+            }
+            if (element.status === 'Rejected') {
+                rejected++;
+            }
+            if (element.status === 'Under Review') {
+                underReview++;
+            }
+        })
 
         const token = jwt.sign({id: user._id}, 'secret');
 
-        res.status(200).json({ token,...user._doc});
+        res.status(200).json({ token,...user._doc, applied, approved, rejected, underReview});
     } catch (error) {
         console.error("Error in user login: ", error);
         res.status(500).json({ message: 'Internal Server Error' });
