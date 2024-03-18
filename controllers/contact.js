@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const Contact = require('../models/contact');
+var auth = require('./auth');
 
 
 
@@ -20,7 +21,7 @@ router.get('/', async function (req, res) {
 });
 
 // Function to get all contacts
-router.get('/getContacts', async (req, res) => {
+router.get('/getContacts',auth ,async (req, res) => {
     try {
         const contacts = await Contact.find({});
         res.status(200).json({ message: "Contacts fetched successfully", data: contacts });

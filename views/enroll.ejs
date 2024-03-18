@@ -98,20 +98,23 @@
           </div>
         <br>
         <div class="cardFlex">
+            <% applied_users.forEach(user =>{ %>
             <div class="card">
-                <h3 class="card-title">User Name</h3>
-                <div class="card-status">Status: Approved</div>
-                <div class="card-comments">Comments: Approved</div>
+                <h3 class="card-title"><%= user.user_name %></h3>
+                <div class="card-comments" style="margin-bottom: 8px;">Email: <%= user.user_email %></div>
+                <div class="card-status">Status: <%= user.status %></div>
+                <div class="card-comments">Comments: <%= user.comment %></div>
                 <div class="actions">
-                    <button class="approve" id="approveAction">Approve</button>
-                    <button class="reject" id="rejectAction">Reject</button>
-                    <button class="comment" id="commentAction">Add Comment</button>
+                    <button class="approve" id="approveAction" onclick="onApprove('<%= user.user_email %>')">Approve</button>
+                    <button class="reject" id="rejectAction" onclick="onReject('<%= user.user_email %>')" >Reject</button>
+                    <button class="comment" id="commentAction" onclick="onComment('<%= user.user_email %>')">Add Comment</button>
                     <div class="profile">
-                        <a href="/approvalProfile" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
+                        <a href="/approvalProfile/<%= user.user_email%>" style="text-decoration: none; color: #f0f0f0; font-size: 14px;">View Profile</a>
                     </div>
                     
                 </div>
             </div>
+            <% }) %>
 
         </div>
        
@@ -146,6 +149,8 @@
         commentcancelButton.addEventListener('click',()=>{
             viewComment.style.display="none";
         })
+
+       
 
     </script>
     

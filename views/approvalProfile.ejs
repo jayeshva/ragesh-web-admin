@@ -71,23 +71,25 @@
     <div class="dashboard">
        
        
-
         <div class="card" style="margin-top: 20px;">
             <h3 class="card-title">User Profile</h3>
-            <img class="card-image" src="" > 
-            <p class="card-data">Name: Ragesh N</p>
-            <p class="card-data">Gender: Male</p>
-            <p class="card-data">Mobile: 1234567890</p>
-            <p class="card-data">Email: ragesh.cs20@bitsathy.ac.in</p>
-            <p class="card-data">Account No: 123456789012</p>
-            <p class="card-data">IFSC: HADFC229423</p>
-            <p class="card-data">Total Subsidies Applied: 25</p>
-            <p class="card-data">Total Subsidies Approved: 0</p>
+            <img class="card-image" src="/<%= user.user_img %>" > 
+            <p class="card-data">Name: <%= user.user_name %></p>
+            <p class="card-data">Gender: <%= user.user_gender %></p>
+            <p class="card-data">Mobile: <%= user.user_mobile %></p>
+            <p class="card-data">Email: <%= user.user_email %></p>
+            <p class="card-data">Total Subsidies Applied: <%= total_subsidies_applied %></p>
+            <p class="card-data">Total Subsidies Under Review: <%= total_subsidies_pending %></p>
+            <p class="card-data">Total Subsidies Approved: <%= total_subsidies_approved %></p>
+            <p class="card-data">Total Subsidies Rejected: <%= total_subsidies_rejected %></p>
+
+
             <div style="display: flex; justify-content: space-between;">
-              <button class="view-button" disabled>View Aadhaar</button>
-              <button class="view-button" disabled>View PAN</button>
+                <a href="/<%=user.user_aadhaar%>" target="_blank" class="view-button">View Aadhaar</a>
+                <a href="/<%=user.user_pan%>" class="view-button" target="_blank" >View PAN</a>
             </div>
-          </div>
+        </div>
+        
       
     </div>
     <script></script>

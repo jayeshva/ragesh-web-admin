@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var Subsidy = require('../models/scheme');
 const { DateTime } = require('luxon');
+var jwt = require('jsonwebtoken');
+const auth = require('./auth');
+var User = require('../models/user');
+
 
 
 
@@ -12,20 +16,32 @@ router.get('/', async (req, res) => {
         scheme.rejected_count = scheme.applied_users.filter(user => user.status === 'Rejected').length;
         scheme.pending_count = scheme.applied_users.filter(user => user.status === 'Under Review').length;
         scheme.total_count = scheme.applied_users.length;
-        var last_date = new Date(scheme.last_date).toLocaleDateString('en-GB',{ day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
-        var created_at = new Date(scheme.created_at).toLocaleDateString('en-GB',{ day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
-        scheme.slast_date = last_date ;
+        var last_date = new Date(scheme.last_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
+        var created_at = new Date(scheme.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
+        scheme.slast_date = last_date;
         scheme.screated_at = created_at;
 
 
-        
+
     });
-    
+
     res.render('schemes', { schemes: schemeData });
 });
 
+router.get('/tracker', auth, async (req, res) => {
+   try{
+    console.log(req.user);
+    var user = await User.findOne({ _id: req.user });
+    var schemes = user.user_applied_schemes;
+    return res.status(200).json({ message: "Schemes fetched successfully", data: schemes });
+}
+    catch(error){
+         return res.status(500).json({ message: "Error Occured While Fetching Schemes", error: error.message });
+    }
+    
+});
 
-router.get('/getScheme', async function (req, res) {
+router.get('/getScheme', auth, async function (req, res) {
     // Fetch all schemes from the database from latest to oldest
     try {
         var schemeData = await Subsidy.find({}).sort({ created_at: -1 });
@@ -34,14 +50,14 @@ router.get('/getScheme', async function (req, res) {
             scheme.rejected_count = scheme.applied_users.filter(user => user.status === 'Rejected').length;
             scheme.pending_count = scheme.applied_users.filter(user => user.status === 'Under Review').length;
             scheme.total_count = scheme.applied_users.length;
-            var last_date = new Date(scheme.last_date).toLocaleDateString('en-GB',{ day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
-            var created_at = new Date(scheme.created_at).toLocaleDateString('en-GB',{ day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
-            scheme.slast_date = last_date ;
+            var last_date = new Date(scheme.last_date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
+            var created_at = new Date(scheme.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).toString();
+            scheme.slast_date = last_date;
             scheme.screated_at = created_at;
-   
+
         });
 
-       
+
         res.status(200).json({ message: "Schemes fetched successfully", data: schemeData });
     }
     catch (error) {
@@ -50,6 +66,56 @@ router.get('/getScheme', async function (req, res) {
 
 
 });
+
+
+
+router.post('/applyScheme', auth, async (req, res) => {
+    try {
+        console.log(req.body);
+        const schemeId = req.body.schema_id;
+        console.log(schemeId);
+        const userId = req.user;
+        const appliedScheme = await Subsidy.findOne({scheme_id: schemeId });
+        const user = await User.findOne({ _id: req.user});
+        if (!appliedScheme || !user) {
+            return res.status(404).json({ message: "Scheme not found" });
+        }
+        var flag = user.user_applied_schemes.find(scheme => scheme.scheme_id === schemeId);
+        var flag2 = appliedScheme.applied_users.find(aUser => aUser.user_email === user.user_email);
+        if (flag) {
+            return res.status(400).json({ message: "You have already applied for this scheme" });
+        }
+        if (flag2) {
+            return res.status(400).json({ message: "You have already applied for this scheme" });
+        }
+        user.user_applied_schemes.push({ 
+            scheme_id: appliedScheme.scheme_id, 
+            scheme_name: appliedScheme.scheme_name, 
+            scheme_category: appliedScheme.scheme_category, 
+            status: "Under Review", 
+            comment: "No Comment" 
+        });
+        appliedScheme.applied_users.push({ 
+            user_name: user.user_name, 
+            user_email: user.user_email, 
+            user_mobile: user.user_mobile, 
+            status: "Under Review", 
+            comment: "No Comment" 
+        });
+
+
+
+        await user.save();
+        await appliedScheme.save();
+        res.status(200).json({ message: "Scheme applied successfully", data: appliedScheme });
+
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error Occured While Applying Scheme", error: error.message });
+    }
+});
+
+
 
 
 

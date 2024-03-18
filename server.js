@@ -23,10 +23,13 @@ var Feed = require('./models/feeds');
 var Contact = require('./models/contact');
 var approvalProfile = require('./controllers/approvalProfile');
 var cors = require('cors');
+var auth = require('./controllers/auth');
 const port = 8000;
 
 app.use(fileUpload());
+
 app.use(cors());
+
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"))
 app.use("/uploads", express.static(__dirname + "/uploads"))
@@ -56,11 +59,11 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
 
-// const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
-// const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
+const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
+const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 
 app.use('/dashboard', dashboard);
@@ -74,7 +77,7 @@ app.use('/approvalProfile', approvalProfile);
 
 app.get('/', function (req, res) {
     res.render('login');
-});
+}); 
 
 app.post('/register/v2', async (req, res) => {
     try {
@@ -380,7 +383,7 @@ app.post('/login', async (req, res) => {
     try {
         const { user_email, user_password } = req.body;
         const user = await User.findOne({ user_email });
-        console.log(user);
+        // console.log(user);
 
         if (!user) {
             return res.status(401).json({ message: 'Authentication failed', status: 0 });
@@ -399,28 +402,51 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Verify your Email Through Confirmation Link', status: 3 });
         }
 
-        req.session.user = user;
-        req.session.loggedIn = true;
-        res.status(200).json({ user });
+        const token = jwt.sign({id: user._id}, 'secret');
+
+        res.status(200).json({ token,...user._doc});
     } catch (error) {
         console.error("Error in user login: ", error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 
-app.get('/checkSession', async (req, res) => {
+
+app.post('/tokenIsValid', async (req, res) => {
     try {
-        if (req.session.loggedIn && req.session.user) {
-            res.status(200).json({ loggedIn: true, user_type: req.session.user.user_type });
-        }
-        else {
-            res.status(200).json({ loggedIn: false });
-        }
-    }
-    catch (error) {
-        console.error("Error in checking session: ", error);
+        // console.log("Token is valid");
+        const token = req.header('x-auth-token');
+        // console.log(token);
+        if (!token) return res.json(false);
+
+        const verified = jwt.verify(token, 'secret');
+        if (!verified) return res.json(false);
+
+        const user = await User.findById(verified.id);
+        if (!user) return res.json(false);
+        // console.log(verified.id);
+        return res.json(true);
+    } catch (error) {
+        console.error("Error in token validation: ", error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
+});
+
+app.get('/user',auth ,async (req, res) => {
+    try {
+        const   user = await User.findById(req.user);
+        var token = req.header('x-auth-token');
+        if (!user) return res.json(false);
+        return res.json({
+           token,
+           ...user._doc
+    }); 
+    }
+    catch (error) {
+        console.error("Error in fetching user: ", error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+
 });
 
 app.post('/logout', function (req, res) {

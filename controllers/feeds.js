@@ -5,6 +5,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 const path = require('path');
+const auth = require('./auth');
 
 
 // Use fileUpload middleware to upload files
@@ -30,7 +31,7 @@ router.get('/', async function (req, res) {
 
 });
 
-router.get('/getFeeds', async (req, res) => {
+router.get('/getFeeds',auth, async (req, res) => {
     try {
         const feeds = await Feed.find({});
         res.status(200).json({ message: "Feeds fetched successfully", data: feeds });

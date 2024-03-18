@@ -11,7 +11,7 @@ router.get('/:id', async function (req, res) {
         var subsidy = await Subsidy.findOne({_id: id});
         if(subsidy){
             console.log(subsidy);
-           res.render('enroll', {subsidy: subsidy});
+           res.render('enroll', {subsidy: subsidy,applied_users: subsidy.applied_users});
         }
         else{
             res.status(404).json({message: "Subsidy not found"});
