@@ -26,7 +26,7 @@ router.get('/', async function (req, res) {
 
         data.forEach(scheme => {
             scheme.applied_users.forEach(user => {
-                totalUsers += 1;
+               
                 if (user.status == "Under Review") {
                     totalunderReview += 1;
                 }
