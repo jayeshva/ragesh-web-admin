@@ -452,11 +452,32 @@ app.post('/tokenIsValid', async (req, res) => {
 app.get('/user',auth ,async (req, res) => {
     try {
         const   user = await User.findById(req.user);
+        var applied = 0;
+        var approved = 0;
+        var rejected = 0;
+        var underReview = 0;
         var token = req.header('x-auth-token');
         if (!user) return res.json(false);
+
+        applied = user.user_applied_schemes.length;
+        user.user_applied_schemes.forEach(element => {
+            if (element.status === 'Approved') {
+                approved++;
+            }
+            if (element.status === 'Rejected') {
+                rejected++;
+            }
+            if (element.status === 'Under Review') {
+                underReview++;
+            }
+        })
         return res.json({
            token,
-           ...user._doc
+           ...user._doc,
+              applied,
+                approved,
+                rejected,
+                underReview
     }); 
     }
     catch (error) {
