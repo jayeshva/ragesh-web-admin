@@ -25,12 +25,13 @@ var approvalProfile = require('./controllers/approvalProfile');
 var cors = require('cors');
 var auth = require('./controllers/auth');
 var isLoggedIn = require('./controllers/adminLogin');
+var notify = require('./config/notifyRoutes');
 const port = 8000;
 
 app.use(fileUpload());
 
 app.use(cors());
-
+ 
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"))
 app.use("/uploads", express.static(__dirname + "/uploads"))
@@ -60,11 +61,11 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
 
-// const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
-// const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
+const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
+const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 
 app.use('/dashboard', dashboard);
@@ -74,6 +75,7 @@ app.use('/feeds', feeds);
 app.use('/profile', profile);
 app.use('/enroll', enroll);
 app.use('/approvalProfile', approvalProfile);
+app.use('/notify',notify);
 
 
 
