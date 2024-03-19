@@ -2,10 +2,11 @@ var express = require('express');
 var router = express.Router();
 const Contact = require('../models/contact');
 var auth = require('./auth');
+var isLoggedIn = require('../controllers/adminLogin');
 
 
 
-router.get('/', async function (req, res) {
+router.get('/',isLoggedIn,async function (req, res) {
     try{
 
         var contact = await Contact.find({});

@@ -138,3 +138,28 @@ body {
   .view-button:hover {
     background-color: #3e8e41; /* Change background color on hover */
   }
+
+  .card-app {
+    width: 400px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 16px;
+    margin-right: 10px;
+}
+
+.card-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.card-status {
+    color: green;
+}
+
+.card-comments {
+    font-style: italic;
+    color: #888;
+    margin-top: 8px;
+}

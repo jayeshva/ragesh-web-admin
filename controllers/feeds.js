@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 const path = require('path');
 const auth = require('./auth');
+var isLoggedIn = require('../controllers/adminLogin');
+
 
 
 // Use fileUpload middleware to upload files
@@ -16,7 +18,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-router.get('/', async function (req, res) {
+router.get('/',isLoggedIn,async function (req, res) {
     try {
     const feeds = await Feed.find({});
     feeds.forEach(feed => {

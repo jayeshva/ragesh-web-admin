@@ -3,11 +3,13 @@ var router = express.Router();
 var User = require('../models/user');
 var Subsidy = require('../models/scheme');
 const Contact = require('../models/contact');
+var isLoggedIn = require('../controllers/adminLogin');
 
 
 
 
-router.get('/', async function (req, res) {
+
+router.get('/', isLoggedIn,async function (req, res) {
     try {
     
         var data = await Subsidy.find({});

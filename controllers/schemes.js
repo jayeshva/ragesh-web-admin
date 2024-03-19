@@ -5,11 +5,12 @@ const { DateTime } = require('luxon');
 var jwt = require('jsonwebtoken');
 const auth = require('./auth');
 var User = require('../models/user');
+var isLoggedIn = require('../controllers/adminLogin');
 
 
 
 
-router.get('/', async (req, res) => {
+router.get('/',isLoggedIn,async (req, res) => {
     var schemeData = await Subsidy.find({}).sort({ created_at: -1 });
     schemeData.forEach(scheme => {
         scheme.approved_count = scheme.applied_users.filter(user => user.status === 'Approved').length;

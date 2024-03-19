@@ -20,13 +20,8 @@
         <form id="login-form">
             <input type="email" placeholder="Email" id="login-email" required>
             <input type="password" placeholder="Password" id="login-password" required>
-            <button type="submit" >Login</button>
+            <button id="loginButton" type="submit" >Login</button>
         </form>
-        <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        <a href="#" onclick="signOut();">Sign out</a> -->
-
-
-        <p>Don't have an account? <a href="/register">Sign Up</a></p>
     </div> 
     <script>
         function onSignIn(googleUser) {
@@ -46,14 +41,12 @@ function signOut() {
 
   document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
-    const loadingSpinner = document.getElementById('loading-spinner');
 
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // Show the loading spinner
-            loadingSpinner.classList.remove('hidden');
+          
 
             // Disable the login button during the request
             const loginButton = loginForm.querySelector('button');
@@ -64,12 +57,12 @@ function signOut() {
             const password = document.getElementById('login-password').value;
 
             const userData = {
-                email: email,
-                password: password
+                user_email: email,
+                user_password: password
             };
 
             // Send the form data to the server
-            fetch('/login', {
+            fetch('/adminLogin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -77,9 +70,14 @@ function signOut() {
                 body: JSON.stringify(userData)
             })
             .then(response => {
-                // Hide the loading spinner
-                loadingSpinner.classList.add('hidden');
-                window.location.reload();
+                if(response.status === 200){
+                    window.location.href = '/dashboard';
+                }
+                 else {
+                    alert('Invalid email or password');
+                    loginButton.textContent = 'Login';
+                }
+                
             })
             .catch(error => {
                 console.error('Error:', error);

@@ -24,6 +24,7 @@ var Contact = require('./models/contact');
 var approvalProfile = require('./controllers/approvalProfile');
 var cors = require('cors');
 var auth = require('./controllers/auth');
+var isLoggedIn = require('./controllers/adminLogin');
 const port = 8000;
 
 app.use(fileUpload());
@@ -59,11 +60,11 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
-// const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
 
-const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
-const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
+// const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
+// const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 
 app.use('/dashboard', dashboard);
@@ -73,6 +74,7 @@ app.use('/feeds', feeds);
 app.use('/profile', profile);
 app.use('/enroll', enroll);
 app.use('/approvalProfile', approvalProfile);
+
 
 
 app.get('/', function (req, res) {
@@ -428,6 +430,24 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.post('/adminLogin',async (req, res) => {
+    try {
+        const { user_email, user_password } = req.body;
+        if (user_email !== 'admin@farmeasy.com' || user_password !== 'Root@1234') {
+            return res.status(401).json({ message: 'Authentication failed', status: 0 });
+        }
+        req.session.user = user_email;
+        res.status(200).json({ message: 'Admin logged in successfully', status: 1 });
+    }
+    catch (error) {
+        console.error("Error in admin login: ", error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+app.get('/adminLogout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/'); 
+});
 
 app.post('/tokenIsValid', async (req, res) => {
     try {

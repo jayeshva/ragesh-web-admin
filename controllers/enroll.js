@@ -2,16 +2,18 @@ var express = require('express');
 var router = express.Router();
 var Subsidy = require('../models/scheme');
 var User = require('../models/user');
+var isLoggedIn = require('../controllers/adminLogin');
 
 
 
 
-router.get('/:id', async function (req, res) {
+
+router.get('/:id',isLoggedIn,async function (req, res) {
     try{
         var id = req.params.id;
         var subsidy = await Subsidy.findOne({_id: id});
         if(subsidy){
-            console.log(subsidy);
+            // console.log(subsidy);
            res.render('enroll', {subsidy: subsidy,applied_users: subsidy.applied_users});
         }
         else{
@@ -27,10 +29,10 @@ router.get('/:id', async function (req, res) {
    
 });
 
-router.post('/approve', async function (req, res) {
+router.post('/approve',isLoggedIn,async function (req, res) {
     try{
         const {scheme_id, user_email,comment} = req.body;
-        console.log(req.body)
+        // console.log(req.body)
         var subsidy = await Subsidy.findOne({scheme_id: scheme_id});
         var user = await User.findOne({user_email: user_email});
         if(subsidy){
@@ -70,7 +72,7 @@ router.post('/approve', async function (req, res) {
 });
 
 
-router.post('/reject', async function (req, res) {
+router.post('/reject',isLoggedIn,async function (req, res) {
 
     try{
         const {scheme_id, user_email,comment} = req.body;
@@ -113,7 +115,7 @@ router.post('/reject', async function (req, res) {
 });
 
 
-router.post('/comment', async function (req, res) {
+router.post('/comment',isLoggedIn,async function (req, res) {
     try{
         const {scheme_id, user_email,comment} = req.body;
         var subsidy = await Subsidy.findOne({scheme_id: scheme_id});
