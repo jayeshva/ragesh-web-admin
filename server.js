@@ -59,11 +59,11 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
 
-//const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
-//const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
+const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
+const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 
 app.use('/dashboard', dashboard);
