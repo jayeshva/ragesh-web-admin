@@ -29,7 +29,7 @@ router.get('/:id',isLoggedIn,async function (req, res) {
    
 });
 
-router.post('/approve',isLoggedIn,async function (req, res) {
+router.post('/approve',async function (req, res) {
     try{
         const {scheme_id, user_email,comment} = req.body;
         // console.log(req.body)
@@ -72,7 +72,7 @@ router.post('/approve',isLoggedIn,async function (req, res) {
 });
 
 
-router.post('/reject',isLoggedIn,async function (req, res) {
+router.post('/reject',async function (req, res) {
 
     try{
         const {scheme_id, user_email,comment} = req.body;
@@ -115,7 +115,7 @@ router.post('/reject',isLoggedIn,async function (req, res) {
 });
 
 
-router.post('/comment',isLoggedIn,async function (req, res) {
+router.post('/comment',async function (req, res) {
     try{
         const {scheme_id, user_email,comment} = req.body;
         var subsidy = await Subsidy.findOne({scheme_id: scheme_id});

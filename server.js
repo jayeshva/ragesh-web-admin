@@ -376,9 +376,6 @@ app.get('/login', async function (req, res) {
     res.render('login');
 });
 
-app.get('/register', async function (req, res) {
-    res.render('register');
-});
 
 
 app.post('/login', async (req, res) => {
@@ -444,6 +441,7 @@ app.post('/adminLogin',async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 app.get('/adminLogout', (req, res) => {
     req.session.destroy();
     res.redirect('/'); 
@@ -708,6 +706,9 @@ app.put('/editContact/:id', async (req, res) => {
     }
 });
 
+app.get('*', function(req, res){
+    res.render('404');
+});
 
 // app.listen(port, function () {
 //     console.log(`Express server listening on port ${port}`);
