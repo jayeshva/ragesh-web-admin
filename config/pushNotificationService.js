@@ -13,7 +13,7 @@ async function sendNotification(data,callback){
         path: "/api/v1/notifications",
         method: "POST",
         headers: headers,
-        rejectUnauthorized: false
+        // rejectUnauthorized: false
     }
     const req = https.request(options, function(res) {  
         res.on('data', function(data) {

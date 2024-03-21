@@ -132,6 +132,28 @@ router.post('/addScheme', async (req, res) => {
         };
         const newScheme = new Subsidy(newSchemeData);
         const savedScheme = await newScheme.save();
+        try{
+            //send a post reaquest to the server to send a notification to all users\
+            var url = "https://localhost:8000/notify/sendNotification";
+            var data = {
+                message: "New Scheme Added: " + req.body.scheme_name
+            };
+            var options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                 rejectUnauthorized: false,
+                body: JSON.stringify(data)
+            };
+            // Set NODE_TLS_REJECT_UNAUTHORIZED to 0 before making the request
+            process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+            fetch(url, options);
+
+        }
+        catch(error){
+            console.log(error);
+        }
         res.status(200).json({ message: "Scheme added successfully", data: savedScheme });
     } catch (error) {
         res.status(500).json({ message: "Error Occured While Adding Scheme", error: error.message });

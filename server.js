@@ -520,7 +520,7 @@ app.post('/logout', function (req, res) {
 }
 );
 
-app.post('/addFeed', async (req, res) => {
+app.post('/addFeed', async (req, res) => {  
     try {
         const { feed_name, feed_description, feed_source_url } = req.body;
         if (!req.files || !req.files.imgFile) {
@@ -551,6 +551,28 @@ app.post('/addFeed', async (req, res) => {
 
         // Save new feed to the database
         const savedFeed = await newFeed.save();
+        try{
+            //send a post reaquest to the server to send a notification to all users\
+            var url = "https://localhost:8000/notify/sendNotification";
+            var data = {
+                message:"New Feed Added : "+req.body.feed_name,
+            };
+            var options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                 rejectUnauthorized: false,
+                body: JSON.stringify(data)
+            };
+            // Set NODE_TLS_REJECT_UNAUTHORIZED to 0 before making the request
+            process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+            fetch(url, options);
+
+        }
+        catch(error){
+            console.log(error);
+        }
 
         res.status(200).json({ message: 'Feed added successfully', data: savedFeed });
     } catch (error) {
