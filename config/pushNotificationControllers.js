@@ -32,9 +32,11 @@ exports.sendNotificationToDevice =(req, res,next) => {
     const playerId = req.body.playerId;
     const data = {
         app_id: ONE_SIGNAL_CONFIG.APP_ID,
+        headings: {"en":"New Notification Ragesh"},
         contents: {"en": message},
         include_player_ids: [playerId],
         content_available: true,
+        global_image: "https://www.bitsathy.ac.in/wp-content/themes/baiotsathycollege/assets/images/logo2.png",
         data:{
             pushTitle:"New Single Notification",
         }

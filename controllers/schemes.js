@@ -165,6 +165,11 @@ router.delete('/deleteScheme/:schemeId', async (req, res) => {
     try {
         const schemeId = req.params.schemeId;
         const deletedScheme = await Subsidy.findOneAndDelete({ scheme_id: schemeId });
+        const userSchemeDelete = await User.findOne({ "user_applied_schemes.scheme_id": schemeId });
+        if (userSchemeDelete) {
+            userSchemeDelete.user_applied_schemes = userSchemeDelete.user_applied_schemes.filter(scheme => scheme.scheme_id !== schemeId);
+            await userSchemeDelete.save();
+        }
         if (!deletedScheme) {
             return res.status(404).json({ message: "Scheme not found" });
         }

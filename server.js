@@ -31,7 +31,7 @@ const port = 8000;
 app.use(fileUpload());
 
 app.use(cors());
- 
+
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"))
 app.use("/uploads", express.static(__dirname + "/uploads"))
@@ -75,13 +75,13 @@ app.use('/feeds', feeds);
 app.use('/profile', profile);
 app.use('/enroll', enroll);
 app.use('/approvalProfile', approvalProfile);
-app.use('/notify',notify);
+app.use('/notify', notify);
 
 
 
 app.get('/', function (req, res) {
     res.render('login');
-}); 
+});
 
 app.post('/register/v2', async (req, res) => {
     try {
@@ -241,7 +241,7 @@ app.post('/register/v2', async (req, res) => {
                 </body>
             </html>`, // Email body with HTML formatting
             };
-            
+
 
             // Send the email
             transporter.sendMail(mailOptions, async (error, info) => {
@@ -420,16 +420,16 @@ app.post('/login', async (req, res) => {
             }
         })
 
-        const token = jwt.sign({id: user._id}, 'secret');
+        const token = jwt.sign({ id: user._id }, 'secret');
 
-        res.status(200).json({ token,...user._doc, applied, approved, rejected, underReview});
+        res.status(200).json({ token, ...user._doc, applied, approved, rejected, underReview });
     } catch (error) {
         console.error("Error in user login: ", error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 
-app.post('/adminLogin',async (req, res) => {
+app.post('/adminLogin', async (req, res) => {
     try {
         const { user_email, user_password } = req.body;
         if (user_email !== 'admin@farmeasy.com' || user_password !== 'Root@1234') {
@@ -446,7 +446,7 @@ app.post('/adminLogin',async (req, res) => {
 
 app.get('/adminLogout', (req, res) => {
     req.session.destroy();
-    res.redirect('/'); 
+    res.redirect('/');
 });
 
 app.post('/tokenIsValid', async (req, res) => {
@@ -469,9 +469,9 @@ app.post('/tokenIsValid', async (req, res) => {
     }
 });
 
-app.get('/user',auth ,async (req, res) => {
+app.get('/user', auth, async (req, res) => {
     try {
-        const   user = await User.findById(req.user);
+        const user = await User.findById(req.user);
         var applied = 0;
         var approved = 0;
         var rejected = 0;
@@ -492,13 +492,13 @@ app.get('/user',auth ,async (req, res) => {
             }
         })
         return res.json({
-           token,
-           ...user._doc,
-              applied,
-                approved,
-                rejected,
-                underReview
-    }); 
+            token,
+            ...user._doc,
+            applied,
+            approved,
+            rejected,
+            underReview
+        });
     }
     catch (error) {
         console.error("Error in fetching user: ", error);
@@ -520,7 +520,7 @@ app.post('/logout', function (req, res) {
 }
 );
 
-app.post('/addFeed', async (req, res) => {  
+app.post('/addFeed', async (req, res) => {
     try {
         const { feed_name, feed_description, feed_source_url } = req.body;
         if (!req.files || !req.files.imgFile) {
@@ -551,18 +551,18 @@ app.post('/addFeed', async (req, res) => {
 
         // Save new feed to the database
         const savedFeed = await newFeed.save();
-        try{
+        try {
             //send a post reaquest to the server to send a notification to all users\
             var url = "https://localhost:8000/notify/sendNotification";
             var data = {
-                message:"New Feed Added : "+req.body.feed_name,
+                message: "New Feed Added : " + req.body.feed_name,
             };
             var options = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                 rejectUnauthorized: false,
+                rejectUnauthorized: false,
                 body: JSON.stringify(data)
             };
             // Set NODE_TLS_REJECT_UNAUTHORIZED to 0 before making the request
@@ -570,7 +570,7 @@ app.post('/addFeed', async (req, res) => {
             fetch(url, options);
 
         }
-        catch(error){
+        catch (error) {
             console.log(error);
         }
 
@@ -730,7 +730,125 @@ app.put('/editContact/:id', async (req, res) => {
     }
 });
 
-app.get('*', function(req, res){
+app.post('/schemeUpdate', async (req, res) => {
+    try {
+        const { user_name, user_email, status, comment, scheme_name, scheme_id } = req.body;
+console.log("request to mail :",req.body);
+   var mailOptions = {};
+
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail', // Replace with your email service provider
+            auth: {
+                user: 'jayesh007va@gmail.com', // Replace with your email address
+                pass: 'rtws hlck rszj qzdv' // Replace with your email password or app password if using Gmail
+            }
+        });
+
+
+
+
+        if (status === "Approved") {
+            mailOptions = {
+                from: 'jayesh007va@gmail.com', // Sender address
+                to: user_email, // Receiver's email
+                subject: 'Subsidy Update - Approved', // Email subject
+                html: `<html>
+                <head>
+                    <style>
+                        h1 { color: #007bff; }
+                        p { font-size: 16px; }
+                        .otp { font-size: 24px; color: #dc3545; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Hello ${user_name},</h2>
+                    <p>Your scheme has been successfully Approved !</p>
+                    <h1>Scheme Name : ${scheme_name}</h1>
+                    <h1>Scheme ID : ${scheme_id}</h1>
+                    <div>
+                        <p>Your approver comment is below:</p>
+                        <h1 class="otp">${comment}</h1>
+                    </div>
+                </body>
+            </html>`, // Email body with HTML formatting
+            };
+        }
+        else if (status === "Rejected") {
+             mailOptions = {
+                from: 'jayesh007va@gmail.com', // Sender address
+                to: user_email, // Receiver's email
+                subject: 'Subsidy Update - Rejected ', // Email subject
+                html: `<html>
+                    <head>
+                        <style>
+                            h1 { color: #007bff; }
+                            p { font-size: 16px; }
+                            .otp { font-size: 24px; color: #dc3545; }
+                        </style>
+                    </head>
+                    <body>
+                        <h2>Hello ${user_name},</h2>
+                        <p>Sorry! your scheme has been Rejected</p>
+                        <h1>Scheme Name : ${scheme_name}</h1>
+                        <h1>Scheme ID : ${scheme_id}</h1>
+                        <div>
+                            <p>The comment is below:</p>
+                            <h1 class="otp">${comment}</h1>
+                        </div>
+                    </body>
+                </html>`, // Email body with HTML formatting
+            };
+        }
+        else if (status === "Under Review") {
+            mailOptions = {
+                from: 'jayesh007va@gmail.com', // Sender address
+                to: user_email, // Receiver's email
+                subject: 'Subsidy Update', // Email subject
+                html: `<html>
+                    <head>
+                        <style>
+                            h1 { color: #007bff; }
+                            p { font-size: 16px; }
+                            .otp { font-size: 24px; color: #dc3545; }
+                        </style>
+                    </head>
+                    <body>
+                        <h2>Hello ${user_name},</h2>
+                        <p>You have some Comment !</p>
+                        <h1>Scheme Name : ${scheme_name}</h1>
+                        <h1>Scheme ID : ${scheme_id}</h1>
+                        <div>
+                            <p>Your comment is below:</p>
+                            <h1 class="otp">${comment}</h1>
+                        </div>
+                    </body>
+                </html>`, // Email body with HTML formatting
+            };
+        }
+        else {
+            return res.status(400).json({ message: 'Invalid Comment', status: 0 });
+        }
+
+
+        // Send the email
+        transporter.sendMail(mailOptions, async (error, info) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                // Handle error in sending email
+                return res.status(500).json({ message: 'Error sending confirmation email', status: 0 });
+            }
+            console.log('Email sent:', info.response);
+          
+            res.status(200).json({ message: 'Scheme Updated and email sent.', status: 1, user: req.body });
+        });
+
+    } catch (error) {
+        console.error("Error in user registration: ", error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+app.get('*', function (req, res) {
     res.render('404');
 });
 

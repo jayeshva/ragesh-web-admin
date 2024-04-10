@@ -3,6 +3,8 @@ var router = express.Router();
 var Subsidy = require('../models/scheme');
 var User = require('../models/user');
 var isLoggedIn = require('../controllers/adminLogin');
+var axios = require('axios').default;
+var https = require('https');
 
 
 
@@ -51,6 +53,23 @@ router.post('/approve',async function (req, res) {
                     user.user_applied_schemes = user_applied_schemes;
                     await user.save();
                     await subsidy.save();
+                    var sendMail = await axios.post('https://localhost:8000/schemeUpdate', {
+                        user_email: user_email,
+                        user_name: user.user_name,
+                        scheme_name: subsidy.scheme_name,
+                        scheme_id: subsidy.scheme_id,
+                        comment: comment,
+                        status: "Approved"
+                    },{
+                        httpsAgent: new https.Agent({ rejectUnauthorized: false }) // Ignore SSL certificate verification
+                    }).then((response) => {
+                        if(response.data.message == "Mail sent"){
+                            console.log("Mail sent");
+                        };
+                        // console.log(response);
+                    }).catch((error) => {
+                        console.log(error);
+                    });
                     res.status(200).json({message: "User approved"});
                 }
                 else{
@@ -94,6 +113,20 @@ router.post('/reject',async function (req, res) {
                     user.user_applied_schemes = user_applied_schemes;
                     await user.save();
                     await subsidy.save();
+                    var sendMail = await axios.post('https://localhost:8000/schemeUpdate', {
+                        user_email: user_email,
+                        user_name: user.user_name,
+                        scheme_name: subsidy.scheme_name,
+                        scheme_id: subsidy.scheme_id,
+                        comment: comment,
+                        status: "Rejected"
+                    },{
+                        httpsAgent: new https.Agent({ rejectUnauthorized: false }) // Ignore SSL certificate verification
+                    }).then((response) => {
+                        console.log(response);
+                    }).catch((error) => {
+                        console.log(error);
+                    });
                     res.status(200).json({message: "User rejected"});
                 }
                 else{
@@ -134,6 +167,22 @@ router.post('/comment',async function (req, res) {
                     user.user_applied_schemes = user_applied_schemes;
                     await user.save();
                     await subsidy.save();
+                    var sendMail = await axios.post('https://localhost:8000/schemeUpdate', {
+                        user_email: user_email,
+                        user_name: user.user_name,
+                        scheme_name: subsidy.scheme_name,
+                        scheme_id: subsidy.scheme_id,
+                        comment: comment,
+                        status: "Under Review"
+                    }, {
+                        httpsAgent: new https.Agent({ rejectUnauthorized: false }) // Ignore SSL certificate verification
+                    }).then((response) => {
+                        if (response.data.message == "Mail sent") {
+                            console.log("Mail sent");
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                    });
                     res.status(200).json({message: "User rejected"});
                 }
                 else{
