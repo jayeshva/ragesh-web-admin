@@ -61,12 +61,12 @@ app.use(session({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/code.jayworks.tech/fullchain.pem', 'utf8');
 
-// const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
-// const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+// // const privateKey = fs.readFileSync('./jayworks.tech.key', 'utf8');
+// // const certificate = fs.readFileSync('./jayworks.tech.crt', 'utf8');
+// const credentials = { key: privateKey, cert: certificate };
 
 app.use('/dashboard', dashboard);
 app.use('/contacts', contact);
@@ -852,13 +852,13 @@ app.get('*', function (req, res) {
     res.render('404');
 });
 
-// app.listen(port, function () {
-//     console.log(`Express server listening on port ${port}`);
-// });
-
-const httpsServer = https.createServer(credentials, app);
-
-
-httpsServer.listen(port, function () {
-    console.log(`Express server listening on port ${port} (HTTPS)`);
+app.listen(port, function () {
+    console.log(`Express server listening on port ${port}`);
 });
+
+// const httpsServer = https.createServer(credentials, app);
+
+
+// httpsServer.listen(port, function () {
+//     console.log(`Express server listening on port ${port} (HTTPS)`);
+// });
